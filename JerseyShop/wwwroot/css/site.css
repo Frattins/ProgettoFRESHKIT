@@ -1,0 +1,28 @@
+/* Stile del banner */
+.hero-banner {
+    background-color: #2e2e2e; /* Verde scuro */
+    padding: 30px 0; /* Altezza ridotta */
+}
+
+/* Loghi dei campionati in cerchio */
+.league-logo-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* Rende il contenitore circolare */
+    border: 3px solid #ccc; /* Colore del bordo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px; /* Centra il cerchio e aggiunge margine sotto */
+    background-color: white;
+    transition: all 0.3s ease; /* Aggiunge una transizione per l'effetto hover */
+}
+
+    .league-logo-circle img {
+        max-width: 70%; /* Rende l'immagine più piccola per adattarsi meglio nel cerchio */
+    }
+
+    .league-logo-circle:hover {
+        border-color: #007bff; /* Cambia colore del bordo al passaggio del mouse */
+        transform: scale(1.1); /* Ingrandisce il cerchio al passaggio del mouse */
+    }

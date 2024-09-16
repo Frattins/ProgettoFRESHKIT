@@ -1,0 +1,41 @@
+﻿@model IEnumerable<JerseyShop.Models.Maglia>
+
+<h2>Maglie della Serie A</h2>
+
+<div class="filters">
+    <select id="teamFilter" class="form-control" onchange="filterByTeam()">
+        <option value="">Tutte le squadre</option>
+        @foreach (var team in Model.Select(m => m.Squadra).Distinct())
+        {
+            <option value="@team">@team</option>
+        }
+    </select>
+</div>
+
+<div class="maglie-list">
+    @foreach (var maglia in Model)
+    {
+        <div class="maglia-item card" style="width: 18rem;">
+            <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="max-height: 200px;object-fit: contain;">
+            <div class="card-body">
+                <h5 class="card-title">@maglia.Nome</h5>
+                <p class="card-text">@maglia.Prezzo €</p>
+                <a href="/Carrello/Add/@maglia.Id" class="btn btn-primary">Aggiungi al Carrello</a>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    function filterByTeam() {
+        var selectedTeam = document.getElementById("teamFilter").value;
+        var maglie = document.querySelectorAll(".maglia-item");
+        maglie.forEach(function (maglia) {
+            if (selectedTeam === "" || maglia.innerText.includes(selectedTeam)) {
+                maglia.style.display = "block";
+            } else {
+                maglia.style.display = "none";
+            }
+        });
+    }
+</script>

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<JerseyShop.Models.Maglia>
+
+<h2>Maglie del @ViewBag.Campionato</h2>
+
+<div class="row">
+    @foreach (var maglia in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="max-height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">@maglia.Nome</h5>
+                    <p class="card-text">@maglia.Prezzo €</p>
+                    <a href="/Carrello/Add/@maglia.Id" class="btn btn-primary btn-sm">Aggiungi al Carrello</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    function filterByTeam() {
+        var selectedTeam = document.getElementById("teamFilter").value;
+        var maglie = document.querySelectorAll(".maglia-item");
+        maglie.forEach(function (maglia) {
+            if (selectedTeam === "" || maglia.innerText.includes(selectedTeam)) {
+                maglia.style.display = "block";
+            } else {
+                maglia.style.display = "none";
+            }
+        });
+    }
+</script>

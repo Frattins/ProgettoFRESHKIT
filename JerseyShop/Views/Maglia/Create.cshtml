@@ -1,0 +1,142 @@
+﻿@model JerseyShop.Models.MagliaViewModel
+
+<h2>Crea Maglia</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Prezzo"></label>
+        <input asp-for="Prezzo" class="form-control" />
+        <span asp-validation-for="Prezzo" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Descrizione"></label>
+        <textarea asp-for="Descrizione" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Campionato">Campionato</label>
+        <select id="Campionato" asp-for="Campionato" class="form-control">
+            <option value="Premier League">Premier League</option>
+            <option value="Serie A">Serie A</option>
+            <option value="La Liga">La Liga</option>
+            <option value="Bundesliga">Bundesliga</option>
+            <option value="Ligue 1">Ligue 1</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Squadra">Squadra</label>
+        <select id="Squadra" asp-for="Squadra" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <img id="SquadraLogo" src="" alt="Logo Squadra" style="display:none; width:100px;" />
+    </div>
+
+    <div class="form-group">
+        <img id="SquadraLogo" src="" alt="Logo Squadra" style="display:none; max-width: 100px; max-height: 100px;" />
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="ImmagineUrl">Immagine Maglia</label>
+        <input type="file" asp-for="ImmagineUrl" class="form-control-file" />
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="IsSpeciale"></label>
+        <input asp-for="IsSpeciale" type="checkbox" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salva</button>
+</form>
+
+
+
+<script>
+    // Squadre per ogni campionato
+    const squadrePerCampionato = {
+        "Premier League": [
+            { name: "Manchester City", logo: "/images/LoghiSquadre/PremierLeague/manchester-cityLogo.png" },
+            { name: "Manchester United", logo: "/images/LoghiSquadre/PremierLeague/ManchesterUnitedLogo.png" },
+            { name: "Chelsea", logo: "/images/LoghiSquadre/PremierLeague/chelseaLogo.png" },
+            { name: "Arsenal", logo: "/images/LoghiSquadre/PremierLeague/ArsenalLogo.png" },
+            { name: "Liverpool", logo: "/images/LoghiSquadre/PremierLeague/LiverpoolLogo.png" }
+        ],
+        "Serie A": [
+            { name: "Inter", logo: "/images/LoghiSquadre/SerieA/InterLogo.png" },
+            { name: "Milan", logo: "/images/LoghiSquadre/SerieA/MilanLogo.png" },
+            { name: "Juventus", logo: "/images/LoghiSquadre/SerieA/JuventusLogo.png" },
+            { name: "Napoli", logo: "/images/LoghiSquadre/SerieA/NapoliLogo.png" },
+            { name: "Roma", logo: "/images/LoghiSquadre/SerieA/romaLogo.png" }
+        ],
+        "Bundesliga": [
+            { name: "Bayern Monaco", logo: "/images/LoghiSquadre/Bundesliga/BayernMoacoLogo.png" },
+            { name: "Borussia Dortmund", logo: "/images/LoghiSquadre/Bundesliga/borussiadortmundLogo.png" }
+        ],
+        "La Liga": [
+            { name: "Real Madrid", logo: "/images/LoghiSquadre/Laliga/Real_MadridLogo.png" },
+            { name: "Barcellona", logo: "/images/LoghiSquadre/Laliga/FC_BarcelonaLogo.png" },
+            { name: "Atletico Madrid", logo: "/images/LoghiSquadre/Laliga/atletico-madridLogo.png" }
+        ],
+        "Ligue 1": [
+            { name: "PSG", logo: "/images/LoghiSquadre/Ligue1/psg-logo.png" },
+            { name: "Monaco", logo: "/images/LoghiSquadre/Ligue1/as-monacoLogo.png" }
+        ]
+    };
+
+    // Funzione per aggiornare le squadre
+    function aggiornaSquadre() {
+        const campionatoSelezionato = document.getElementById("Campionato").value;
+        const squadraSelect = document.getElementById("Squadra");
+        const squadraLogo = document.getElementById("SquadraLogo");
+
+        // Svuota il select delle squadre
+        squadraSelect.innerHTML = "";
+
+        // Aggiungi le squadre in base al campionato selezionato
+        const squadre = squadrePerCampionato[campionatoSelezionato] || [];
+        squadre.forEach(squadra => {
+            const option = document.createElement("option");
+            option.value = squadra.name;
+            option.textContent = squadra.name;
+            squadraSelect.appendChild(option);
+        });
+
+        // Aggiorna il logo della prima squadra selezionata
+        if (squadre.length > 0) {
+            squadraLogo.src = squadre[0].logo;
+            squadraLogo.style.display = "block";
+        } else {
+            squadraLogo.style.display = "none";
+        }
+    }
+
+    // Aggiorna il logo della squadra selezionata
+    document.getElementById("Squadra").addEventListener("change", function () {
+        const campionatoSelezionato = document.getElementById("Campionato").value;
+        const squadraSelezionata = document.getElementById("Squadra").value;
+        const squadraLogo = document.getElementById("SquadraLogo");
+
+        const squadre = squadrePerCampionato[campionatoSelezionato] || [];
+        const squadra = squadre.find(s => s.name === squadraSelezionata);
+        if (squadra) {
+            squadraLogo.src = squadra.logo;
+            squadraLogo.style.display = "block";
+        }
+    });
+
+    // Inizializza le squadre quando cambia il campionato
+    document.getElementById("Campionato").addEventListener("change", aggiornaSquadre);
+
+    // Inizializza le squadre alla prima apertura della pagina
+    aggiornaSquadre();
+</script>

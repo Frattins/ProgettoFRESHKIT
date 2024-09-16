@@ -1,0 +1,23 @@
+﻿@model IEnumerable<JerseyShop.Controllers.UserWithRolesViewModel>
+
+<h2>Lista degli Utenti</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>UserName</th>
+            <th>Ruoli</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var userWithRoles in Model)
+        {
+            <tr>
+                <td>@userWithRoles.User.Email</td>
+                <td>@userWithRoles.User.UserName</td>
+                <td>@string.Join(", ", userWithRoles.Roles)</td>
+            </tr>
+        }
+    </tbody>
+</table>

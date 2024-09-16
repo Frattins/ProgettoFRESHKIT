@@ -1,0 +1,33 @@
+﻿@model JerseyShop.Models.Carrello
+
+<h2>Il tuo carrello</h2>
+
+@if (Model.Items.Count == 0)
+{
+    <p>Il carrello è vuoto.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Maglia</th>
+                <th>Prezzo</th>
+                <th>Quantità</th>
+                <th>Totale</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Nome</td>
+                    <td>@item.PrezzoUnitario €</td>
+                    <td>@item.Quantità</td>
+                    <td>@item.PrezzoTotale €</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <h3>Totale: @Model.Totale €</h3>
+}
