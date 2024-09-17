@@ -1,5 +1,4 @@
 ﻿@model JerseyShop.Models.Carrello
-
 <h2>Il tuo Carrello</h2>
 
 @if (Model.Items.Count == 0)
@@ -8,58 +7,62 @@
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Immagine</th>
-                <th>Nome</th>
-                <th>Prezzo Unitario</th>
-                <th>Quantità</th>
-                <th>Prezzo Totale</th>
-                <th>Azioni</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Items)
-            {
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="thead-light">
                 <tr>
-                    <td>
-                        <img src="/images/Maglie/@item.ImmagineUrl" alt="@item.Nome" style="width: 50px; height: 50px; object-fit: cover;" />
-                    </td>
-                    <td>@item.Nome</td>
-                    <td>@item.PrezzoUnitario.ToString("C")</td>
-                    <td>
-                        <form method="post" action="@Url.Action("DecrementaQuantita", "Carrello")" style="display:inline-block;">
-                            <input type="hidden" name="magliaId" value="@item.MagliaId" />
-                            <button type="submit" class="btn btn-sm btn-outline-secondary">-</button>
-                        </form>
-                        @item.Quantità
-                        <form method="post" action="@Url.Action("IncrementaQuantita", "Carrello")" style="display:inline-block;">
-                            <input type="hidden" name="magliaId" value="@item.MagliaId" />
-                            <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
-                        </form>
-                    </td>
-                    <td>@item.PrezzoTotale.ToString("C")</td>
-                    <td>
-                        <form method="post" action="@Url.Action("Rimuovi", "Carrello")">
-                            <input type="hidden" name="magliaId" value="@item.MagliaId" />
-                            <button type="submit" class="btn btn-danger btn-sm">Rimuovi</button>
-                        </form>
-                    </td>
+                    <th style="width: 150px;">Immagine</th>
+                    <th style="width: 300px;">Nome</th>
+                    <th>Prezzo Unitario</th>
+                    <th>Quantità</th>
+                    <th>Prezzo Totale</th>
+                    <th>Azioni</th>
                 </tr>
-            }
-        </tbody>
-
-        <tfoot>
-            <tr>
-                <td colspan="3"><strong>Totale</strong></td>
-                <td><strong>@Model.Totale.ToString("C")</strong></td>
-                <td></td>
-            </tr>
-        </tfoot>
-    </table>
-
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td><img src="/images/Maglie/@item.ImmagineUrl" alt="@item.Nome" style="width: 100px; height: 100px;" /></td>
+                        <td>
+                            @item.Nome
+                            @if (!string.IsNullOrEmpty(item.CustomName) || item.CustomNumber.HasValue)
+                            {
+                                <div class="text-muted">
+                                    <small>Personalizzazione: @item.CustomName, Numero: @(item.CustomNumber.HasValue ? item.CustomNumber.Value.ToString() : "N/A")</small>
+                                </div>
+                            }
+                        </td>
+                        <td>@item.PrezzoUnitario.ToString("C")</td>
+                        <td>@item.Quantità</td>
+                        <td>@item.PrezzoTotale.ToString("C")</td>
+                        <td>
+                            <div class="d-flex">
+                                <form method="post" asp-action="IncrementaQuantita" asp-route-magliaId="@item.MagliaId" class="mr-2">
+                                    <button type="submit" class="btn btn-outline-success btn-sm">
+                                        <i class="fas fa-plus"></i> <!-- Icona di aggiunta -->
+                                    </button>
+                                </form>
+                                <form method="post" asp-action="DecrementaQuantita" asp-route-magliaId="@item.MagliaId" class="mr-2">
+                                    <button type="submit" class="btn btn-outline-warning btn-sm">
+                                        <i class="fas fa-minus"></i> <!-- Icona di decremento -->
+                                    </button>
+                                </form>
+                                <form method="post" asp-action="Rimuovi" asp-route-magliaId="@item.MagliaId">
+                                    <button type="submit" class="btn btn-danger btn-sm">Rimuovi</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4"><strong>Totale</strong></td>
+                    <td colspan="2"><strong>@Model.Totale.ToString("C")</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
     <a href="@Url.Action("Checkout", "Ordine")" class="btn btn-primary">Procedi al Checkout</a>
-
-
 }

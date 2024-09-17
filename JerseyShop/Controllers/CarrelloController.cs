@@ -30,9 +30,9 @@ namespace JerseyShop.Controllers
             return View(carrello);
         }
 
-        // Modifica: Aggiungi accetta GET e non POST
-        [HttpGet]
-        public IActionResult Aggiungi(int magliaId)
+        // Modifica: Aggiungi accetta POST con supporto per la personalizzazione
+        [HttpPost]
+        public IActionResult Aggiungi(int magliaId, string customName, int? customNumber)
         {
             var carrello = HttpContext.Session.GetObject<Carrello>(GetCarrelloSessionKey()) ?? new Carrello();
             var maglia = GetMagliaById(magliaId);
@@ -42,7 +42,16 @@ namespace JerseyShop.Controllers
                 return NotFound();
             }
 
-            var item = carrello.Items.FirstOrDefault(i => i.MagliaId == magliaId);
+            // Calcola il prezzo, aggiungendo 20 euro solo se ci sono personalizzazioni
+            decimal prezzoUnitario = maglia.Prezzo;
+            if (!string.IsNullOrEmpty(customName) || customNumber.HasValue)
+            {
+                prezzoUnitario += 20;
+            }
+
+            var item = carrello.Items.FirstOrDefault(i => i.MagliaId == magliaId &&
+                                                          i.CustomName == customName &&
+                                                          i.CustomNumber == customNumber);
 
             if (item == null)
             {
@@ -50,9 +59,11 @@ namespace JerseyShop.Controllers
                 {
                     MagliaId = magliaId,
                     Nome = maglia.Nome,
-                    PrezzoUnitario = maglia.Prezzo,
+                    PrezzoUnitario = prezzoUnitario,
                     Quantità = 1,
-                    ImmagineUrl = maglia.ImmagineUrl
+                    ImmagineUrl = maglia.ImmagineUrl,
+                    CustomName = customName,
+                    CustomNumber = customNumber
                 });
             }
             else
@@ -60,13 +71,14 @@ namespace JerseyShop.Controllers
                 item.Quantità++;
             }
 
-            HttpContext.Session.SetObject(GetCarrelloSessionKey(), carrello);  // Assicurati che il carrello venga sempre salvato
+            HttpContext.Session.SetObject(GetCarrelloSessionKey(), carrello);
 
             return RedirectToAction("Index");
         }
 
 
-        // Modifica: Rimuovi accetta POST
+
+        // Rimozione di una maglia dal carrello
         [HttpPost]
         public IActionResult Rimuovi(int magliaId)
         {
@@ -83,7 +95,7 @@ namespace JerseyShop.Controllers
         }
 
         // Incrementa la quantità
-        [HttpPost] // Deve essere POST, non GET
+        [HttpPost]
         public IActionResult IncrementaQuantita(int magliaId)
         {
             var carrello = HttpContext.Session.GetObject<Carrello>(GetCarrelloSessionKey()) ?? new Carrello();
@@ -99,7 +111,7 @@ namespace JerseyShop.Controllers
         }
 
         // Decrementa la quantità
-        [HttpPost] // Deve essere POST, non GET
+        [HttpPost]
         public IActionResult DecrementaQuantita(int magliaId)
         {
             var carrello = HttpContext.Session.GetObject<Carrello>(GetCarrelloSessionKey()) ?? new Carrello();
@@ -125,6 +137,5 @@ namespace JerseyShop.Controllers
 
             return maglia;
         }
-
     }
 }

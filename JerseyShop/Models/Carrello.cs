@@ -15,6 +15,10 @@ namespace JerseyShop.Models
         public decimal PrezzoUnitario { get; set; }
         public int Quantità { get; set; }
         public decimal PrezzoTotale => PrezzoUnitario * Quantità;
-        public string ImmagineUrl { get; set; } 
+        public string ImmagineUrl { get; set; }
+        public string Personalizzazione { get; set; }
+        public string CustomName { get; set; }
+        public int? CustomNumber { get; set; }
     }
 }
+

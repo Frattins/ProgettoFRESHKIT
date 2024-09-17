@@ -2,14 +2,27 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="hero-banner" style="background-color: #2e2e2e; padding: 30px 0;">
-    <!-- Verde scuro, ma puoi cambiare con #000 per nero o #3a3a3a per grigio -->
+<div class="hero-banner" style="background-color: #2e2e2e; padding: 30px 0; position: relative;">
     <div class="container text-center">
-        <img src="/images/JerseyShopLogo.png" alt="JerseyShop Logo" style="max-width: 150px; margin-bottom: 10px;" />
+        <div style="position: relative; display: inline-block;">
+
+            <!-- Maglia Calafiori (retro-italia) -->
+            <img src="/images/Maglie/5706c3aa-5f36-42ce-9399-63197f8f066a_retro-italia.png" alt="Special Calafiori Jersey"
+                 style="width: 19vw; position: absolute; left: -18vw; top: 60%; transform: translateY(-50%) rotate(-15deg);" />
+
+            <!-- Logo -->
+            <img src="/images/JerseyShopLogo.png" alt="JerseyShop Logo" style="width: 12vw; margin-bottom: 10px;" />
+
+            <!-- Maglia Lukaku (retro-belgio) -->
+            <img src="/images/Maglie/c6127bc5-d119-41c2-8de0-03359de4e95a_retro-belgio.png" alt="Special Lukaku Jersey"
+                 style="width: 19vw; position: absolute; right: -18vw; top: 60%; transform: translateY(-50%) rotate(15deg);" />
+        </div>
+
         <h1 class="text-white">Benvenuti su JerseyShop</h1>
         <a href="/Maglia/Speciali" class="btn btn-primary btn-lg mt-3">Vai alle Maglie Speciali</a>
     </div>
 </div>
+
 
 <hr />
 <div class="container">
@@ -51,4 +64,5 @@
             </a>
         </div>
     </div>
+
 </div>
