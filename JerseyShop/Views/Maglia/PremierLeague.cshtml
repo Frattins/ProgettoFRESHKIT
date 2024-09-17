@@ -1,18 +1,27 @@
 ﻿@model IEnumerable<JerseyShop.Models.Maglia>
 
-<h2>Maglie del @ViewBag.Campionato</h2>
+<h2>Maglie della Premier League</h2>
 
-<div class="row">
+<div class="filters">
+    <select id="teamFilter" class="form-control" onchange="filterByTeam()">
+        <option value="">Tutte le squadre</option>
+        @foreach (var team in Model.Select(m => m.Squadra).Distinct())
+        {
+            <option value="@team">@team</option>
+        }
+    </select>
+</div>
+
+<div class="maglie-list">
     @foreach (var maglia in Model)
     {
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="max-height: 200px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title">@maglia.Nome</h5>
-                    <p class="card-text">@maglia.Prezzo €</p>
-                    <a href="/Carrello/Add/@maglia.Id" class="btn btn-primary btn-sm">Aggiungi al Carrello</a>
-                </div>
+        <div class="maglia-item card" style="width: 18rem;">
+            <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="max-height: 200px;object-fit: contain;">
+            <div class="card-body">
+                <h5 class="card-title">@maglia.Nome</h5>
+                <p class="card-text">@maglia.Prezzo €</p>
+                <a href="/Carrello/Aggiungi?magliaId=@maglia.Id" class="btn btn-primary">Aggiungi al Carrello</a>
+
             </div>
         </div>
     }

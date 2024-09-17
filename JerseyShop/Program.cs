@@ -1,9 +1,12 @@
 using JerseyShop.Data;  // Assicurati che ci sia il namespace corretto
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurazione Stripe
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

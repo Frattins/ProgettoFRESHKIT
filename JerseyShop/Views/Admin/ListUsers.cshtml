@@ -1,13 +1,14 @@
-﻿@model IEnumerable<JerseyShop.Controllers.UserWithRolesViewModel>
+﻿@model IEnumerable<JerseyShop.ViewModels.UserWithRolesViewModel>
 
 <h2>Lista degli Utenti</h2>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Email</th>
             <th>UserName</th>
             <th>Ruoli</th>
+            <th>Azioni</th>
         </tr>
     </thead>
     <tbody>
@@ -17,6 +18,24 @@
                 <td>@userWithRoles.User.Email</td>
                 <td>@userWithRoles.User.UserName</td>
                 <td>@string.Join(", ", userWithRoles.Roles)</td>
+                <td>
+                    @if (userWithRoles.Roles.Contains("Admin"))
+                    {
+                        <form method="post" asp-action="RimuoviAdmin" asp-controller="Admin" asp-route-id="@userWithRoles.User.Id" style="display:inline-block;">
+                            <button type="submit" class="btn btn-warning btn-sm">Rimuovi Admin</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" asp-action="PromuoviAdmin" asp-controller="Admin" asp-route-id="@userWithRoles.User.Id" style="display:inline-block;">
+                            <button type="submit" class="btn btn-success btn-sm">Promuovi a Admin</button>
+                        </form>
+                    }
+
+                    <form method="post" asp-action="EliminaUtente" asp-controller="Admin" asp-route-id="@userWithRoles.User.Id" style="display:inline-block;">
+                        <button type="submit" class="btn btn-danger btn-sm">Elimina Utente</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>

@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace JerseyShop.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class MagliaController : Controller
     {
         private readonly FootballShopContext _context;
@@ -24,80 +23,80 @@ namespace JerseyShop.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Index(string campionato)
+        // Admin Index - Display all maglie (admin only)
+        [Authorize(Roles = "Admin")]
+        public IActionResult Index()
         {
-            var maglie = _context.Maglie
-                .Where(m => m.Campionato == campionato && !m.IsSpeciale) // Escludi le maglie speciali
-                .ToList();
-            ViewBag.Campionato = campionato;  // Assicurati che il campionato sia passato correttamente
+            var maglie = _context.Maglie.ToList();  // Show all jerseys, including special and from all leagues
             return View(maglie);
         }
 
-        // GET: Maglia/SerieA
+        // GET: Maglia/SerieA (visible to all users)
         public IActionResult SerieA()
         {
             var maglie = _context.Maglie
-                .Where(m => m.Campionato == "Serie A" && !m.IsSpeciale) // Escludi le maglie speciali
+                .Where(m => m.Campionato == "Serie A" && !m.IsSpeciale)  // Exclude special jerseys
                 .ToList();
             return View(maglie);
         }
 
-        // GET: Maglia/PremierLeague
+        // GET: Maglia/PremierLeague (visible to all users)
         public IActionResult PremierLeague()
         {
             var maglie = _context.Maglie
-                .Where(m => m.Campionato == "Premier League" && !m.IsSpeciale) // Escludi le maglie speciali
+                .Where(m => m.Campionato == "Premier League" && !m.IsSpeciale)  // Exclude special jerseys
                 .ToList();
-            ViewBag.Campionato = "Premier League";
             return View(maglie);
         }
 
-        // GET: Maglia/Bundesliga
+        // GET: Maglia/Bundesliga (visible to all users)
         public IActionResult Bundesliga()
         {
             var maglie = _context.Maglie
-                .Where(m => m.Campionato == "Bundesliga" && !m.IsSpeciale) // Escludi le maglie speciali
+                .Where(m => m.Campionato == "Bundesliga" && !m.IsSpeciale)  // Exclude special jerseys
                 .ToList();
             return View(maglie);
         }
 
-        // GET: Maglia/LaLiga
+        // GET: Maglia/LaLiga (visible to all users)
         public IActionResult LaLiga()
         {
             var maglie = _context.Maglie
-                .Where(m => m.Campionato == "La Liga" && !m.IsSpeciale) // Escludi le maglie speciali
+                .Where(m => m.Campionato == "La Liga" && !m.IsSpeciale)  // Exclude special jerseys
                 .ToList();
             return View(maglie);
         }
 
-        // GET: Maglia/Ligue1
+        // GET: Maglia/Ligue1 (visible to all users)
         public IActionResult Ligue1()
         {
             var maglie = _context.Maglie
-                .Where(m => m.Campionato == "Ligue 1" && !m.IsSpeciale) // Escludi le maglie speciali
+                .Where(m => m.Campionato == "Ligue 1" && !m.IsSpeciale)  // Exclude special jerseys
                 .ToList();
             return View(maglie);
         }
 
-        // GET: Maglia/Speciali
+        // GET: Maglia/Speciali (visible to all users)
         public IActionResult Speciali()
         {
             var maglieSpeciali = _context.Maglie
-                .Where(m => m.IsSpeciale)  // Mostra solo le maglie speciali
+                .Where(m => m.IsSpeciale)  // Show only special jerseys
                 .ToList();
             return View(maglieSpeciali);
         }
 
-        // GET: Maglia/Create
+        // GET: Maglia/Create (admin only)
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Create()
         {
-            // Potresti voler passare alcune informazioni tramite ViewBag
+            // Pass available leagues to the view
             ViewBag.Campionati = new SelectList(new[] { "Premier League", "Serie A", "La Liga", "Bundesliga", "Ligue 1" });
             return View();
         }
 
-        // POST: Maglia/Create
+        // POST: Maglia/Create (admin only)
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MagliaViewModel model)
@@ -106,30 +105,23 @@ namespace JerseyShop.Controllers
             {
                 string uniqueFileName = null;
 
-                // Check if the image has been uploaded
+                // Check if an image has been uploaded
                 if (model.ImmagineUrl != null)
                 {
-                    // Define the folder where the images will be stored
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "Maglie");
-
-                    // Ensure that the directory exists, and create it if necessary
                     if (!Directory.Exists(uploadsFolder))
                     {
                         Directory.CreateDirectory(uploadsFolder);
                     }
-
-                    // Create a unique filename for the image
                     uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImmagineUrl.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                    // Save the image file to the specified path
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         await model.ImmagineUrl.CopyToAsync(fileStream);
                     }
                 }
 
-                // Create a new object Maglia with the specified fields
                 var newMaglia = new Maglia
                 {
                     Nome = model.Nome,
@@ -141,15 +133,16 @@ namespace JerseyShop.Controllers
                     Squadra = model.Squadra
                 };
 
-                // Add the new jersey to the database
                 _context.Add(newMaglia);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index");  // Redirect to the admin index after creation
             }
 
             return View(model);
         }
 
+        // DELETE: Maglia/Delete (admin only)
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -159,7 +152,7 @@ namespace JerseyShop.Controllers
                 _context.Maglie.Remove(maglia);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index");  // Redirect to the admin index after deletion
         }
     }
 }
