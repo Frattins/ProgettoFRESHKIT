@@ -18,6 +18,10 @@
             <h1>@Model.Nome</h1>
             <p><strong>Prezzo:</strong> @Model.Prezzo.ToString("C")</p>
             <p><strong>Descrizione:</strong> @Model.Descrizione</p>
+            <button class="btn btn-outline-danger toggle-favorite" data-maglia-id="@Model.Id">
+                <i class="@(Model.IsFavorite ? "fas" : "far") fa-heart"></i>
+                @(Model.IsFavorite ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti")
+            </button>
 
             @if (!Model.IsSpeciale)
             {
@@ -82,6 +86,31 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function () {
+        $('.toggle-favorite').on('click', function () {
+            var btn = $(this);
+            var magliaId = btn.data('maglia-id');
+
+            $.ajax({
+                url: '/Favorites/ToggleFavorite',
+                type: 'POST',
+                data: { magliaId: magliaId },
+                success: function (data) {
+                    if (data.isFavorite) {
+                        btn.find('i').removeClass('far').addClass('fas');
+                        btn.text('Rimuovi dai preferiti');
+                    } else {
+                        btn.find('i').removeClass('fas').addClass('far');
+                        btn.text('Aggiungi ai preferiti');
+                    }
+                },
+                error: function () {
+                    alert('Si è verificato un errore durante l\'aggiornamento dei preferiti.');
+                }
+            });
+        });
+    });
 
 @functions {
     public string GetCampionatoLogo(string campionato)

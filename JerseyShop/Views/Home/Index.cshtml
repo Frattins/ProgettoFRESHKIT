@@ -1,15 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Home";
 }
-
-<div class="hero-banner" style="background-color: #2e2e2e; padding: 30px 0;">
-    <!-- Verde scuro, ma puoi cambiare con #000 per nero o #3a3a3a per grigio -->
-    <div class="container text-center">
-        <img src="/images/JerseyShopLogo.png" alt="JerseyShop Logo" style="max-width: 150px; margin-bottom: 10px;" />
-        <h1 class="text-white">Benvenuti su JerseyShop</h1>
-        <a href="/Maglia/Speciali" class="btn btn-primary btn-lg mt-3">Vai alle Maglie Speciali</a>
+<link rel="stylesheet" href="~/css/site.css" />
+<div class="hero-banner">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4">
+                <img src="/images/Maglie/5706c3aa-5f36-42ce-9399-63197f8f066a_retro-italia.png" alt="Maglia Italia" class="img-fluid banner-jersey left-jersey" />
+            </div>
+            <div class="col-md-4 text-center">
+                <h1 class="text-white mb-4">Benvenuti su FRESHKIT</h1>
+                <a href="@Url.Action("Speciali", "Maglia")" class="btn btn-primary btn-lg">Vai alle Maglie Speciali</a>
+            </div>
+            <div class="col-md-4">
+                <img src="/images/Maglie/16f188f5-2d28-41d0-984c-0a7fe1cb3d49_retro-belgio.png" alt="Maglia Belgio" class="img-fluid banner-jersey right-jersey" />
+            </div>
+        </div>
     </div>
 </div>
+
+
 
 <hr />
 <div class="container">

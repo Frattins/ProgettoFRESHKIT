@@ -1,37 +1,52 @@
 ﻿@model IEnumerable<JerseyShop.Models.Maglia>
 
-<h2>Maglie della Premier League</h2>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Maglie della Premier League</h2>
 
-<div class="filters">
-    <select id="teamFilter" class="form-control" onchange="filterByTeam()">
-        <option value="">Tutte le squadre</option>
-        @foreach (var team in Model.Select(m => m.Squadra).Distinct())
-        {
-            <option value="@team">@team</option>
-        }
-    </select>
-</div>
-
-<div class="maglie-list">
-    @foreach (var maglia in Model)
-    {
-        <div class="maglia-item card" style="width: 18rem;">
-            <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="max-height: 200px;object-fit: contain;">
-            <div class="card-body">
-                <h5 class="card-title">@maglia.Nome</h5>
-                <p class="card-text">@maglia.Prezzo €</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <a href="/Maglia/Details/@maglia.Id" class="btn btn-secondary">Vedi Dettagli</a>
-                    <button class="btn btn-outline-primary add-to-cart" data-maglia-id="@maglia.Id">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <button class="btn btn-outline-danger toggle-favorite" data-maglia-id="@maglia.Id">
-                        <i class="@(maglia.IsFavorite ? "fas" : "far") fa-heart"></i>
-                    </button>
+    <div class="row mb-4">
+        <div class="col-md-6 offset-md-3">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="teamFilter">Filtra per squadra:</label>
                 </div>
+                <select id="teamFilter" class="custom-select" onchange="filterByTeam()">
+                    <option value="">Tutte le squadre</option>
+                    @foreach (var team in Model.Select(m => m.Squadra).Distinct().OrderBy(t => t))
+                    {
+                        <option value="@team">@team</option>
+                    }
+                </select>
             </div>
         </div>
-    }
+    </div>
+
+    <div class="row maglie-list">
+        @foreach (var maglia in Model)
+        {
+            <div class="col-lg-4 col-md-6 mb-4 maglia-item" data-team="@maglia.Squadra">
+                <div class="card h-100 shadow-sm">
+                    <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="height: 250px; object-fit: contain;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@maglia.Nome</h5>
+                        <p class="card-text mt-auto">
+                            <strong>@maglia.Prezzo.ToString("C")</strong>
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <a href="/Maglia/Details/@maglia.Id" class="btn btn-outline-secondary btn-sm">Dettagli</a>
+                            <div>
+                                <button class="btn btn-outline-primary btn-sm add-to-cart" data-maglia-id="@maglia.Id" title="Aggiungi al carrello">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm toggle-favorite" data-maglia-id="@maglia.Id" title="Aggiungi/Rimuovi dai preferiti">
+                                    <i class="@(maglia.IsFavorite ? "fas" : "far") fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
 <script>
@@ -39,25 +54,34 @@
         var selectedTeam = document.getElementById("teamFilter").value;
         var maglie = document.querySelectorAll(".maglia-item");
         maglie.forEach(function (maglia) {
-            if (selectedTeam === "" || maglia.innerText.includes(selectedTeam)) {
+            if (selectedTeam === "" || maglia.getAttribute('data-team') === selectedTeam) {
                 maglia.style.display = "block";
             } else {
                 maglia.style.display = "none";
             }
         });
     }
-</script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+
     $(document).ready(function () {
         $('.add-to-cart').on('click', function (e) {
             e.preventDefault();
-            var magliaId = $(this).data('maglia-id');
-            $.post('/Carrello/Aggiungi', { magliaId: magliaId }, function (response) {
-                alert('Maglia aggiunta al carrello!');
-            }).fail(function (error) {
-                console.error('Errore:', error);
-                alert('Si è verificato un errore durante l'aggiunta al carrello.');
+            var btn = $(this);
+            var magliaId = btn.data('maglia-id');
+
+            $.ajax({
+                url: '/Carrello/Aggiungi',
+                type: 'POST',
+                data: { magliaId: magliaId },
+                success: function (response) {
+                    toastr.success('Maglia aggiunta al carrello!');
+                    btn.prop('disabled', true).addClass('btn-success').removeClass('btn-outline-primary');
+                    setTimeout(function () {
+                        btn.prop('disabled', false).addClass('btn-outline-primary').removeClass('btn-success');
+                    }, 2000);
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Si è verificato un errore durante l\'aggiunta al carrello.');
+                }
             });
         });
 
@@ -65,15 +89,23 @@
             e.preventDefault();
             var btn = $(this);
             var magliaId = btn.data('maglia-id');
-            $.post('/Favorites/ToggleFavorite', { magliaId: magliaId }, function (data) {
-                if (data.isFavorite) {
-                    btn.find('i').removeClass('far').addClass('fas');
-                } else {
-                    btn.find('i').removeClass('fas').addClass('far');
+
+            $.ajax({
+                url: '/Favorites/ToggleFavorite',
+                type: 'POST',
+                data: { magliaId: magliaId },
+                success: function (data) {
+                    if (data.isFavorite) {
+                        btn.find('i').removeClass('far').addClass('fas');
+                        toastr.success('Maglia aggiunta ai preferiti!');
+                    } else {
+                        btn.find('i').removeClass('fas').addClass('far');
+                        toastr.info('Maglia rimossa dai preferiti.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Si è verificato un errore durante l\'aggiornamento dei preferiti.');
                 }
-            }).fail(function (error) {
-                console.error('Errore:', error);
-                alert('Si è verificato un errore durante l'aggiornamento dei preferiti.');
             });
         });
     });

@@ -1,63 +1,75 @@
 ﻿@model JerseyShop.Models.MagliaViewModel
 
-<h2>Crea Maglia</h2>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Crea Nuova Maglia</h2>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="Nome"></label>
-        <input asp-for="Nome" class="form-control" />
-        <span asp-validation-for="Nome" class="text-danger"></span>
-    </div>
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Nome">Nome Maglia</label>
+                    <input asp-for="Nome" class="form-control" placeholder="Inserisci il nome della maglia" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="Prezzo"></label>
-        <input asp-for="Prezzo" class="form-control" />
-        <span asp-validation-for="Prezzo" class="text-danger"></span>
-    </div>
+                <div class="form-group">
+                    <label asp-for="Prezzo">Prezzo</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">€</span>
+                        </div>
+                        <input asp-for="Prezzo" class="form-control" placeholder="0.00" />
+                    </div>
+                    <span asp-validation-for="Prezzo" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="Descrizione"></label>
-        <textarea asp-for="Descrizione" class="form-control"></textarea>
-    </div>
+                <div class="form-group">
+                    <label asp-for="Descrizione">Descrizione</label>
+                    <textarea asp-for="Descrizione" class="form-control" rows="3" placeholder="Inserisci una descrizione della maglia"></textarea>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="Campionato">Campionato</label>
-        <select id="Campionato" asp-for="Campionato" class="form-control">
-            <option value="Premier League">Premier League</option>
-            <option value="Serie A">Serie A</option>
-            <option value="La Liga">La Liga</option>
-            <option value="Bundesliga">Bundesliga</option>
-            <option value="Ligue 1">Ligue 1</option>
-        </select>
-    </div>
+                <div class="form-group">
+                    <label asp-for="Campionato">Campionato</label>
+                    <select id="Campionato" asp-for="Campionato" class="form-control">
+                        <option value="">Seleziona un campionato</option>
+                        <option value="Premier League">Premier League</option>
+                        <option value="Serie A">Serie A</option>
+                        <option value="La Liga">La Liga</option>
+                        <option value="Bundesliga">Bundesliga</option>
+                        <option value="Ligue 1">Ligue 1</option>
+                    </select>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="Squadra">Squadra</label>
-        <select id="Squadra" asp-for="Squadra" class="form-control"></select>
-    </div>
+                <div class="form-group">
+                    <label asp-for="Squadra">Squadra</label>
+                    <select id="Squadra" asp-for="Squadra" class="form-control"></select>
+                </div>
 
-    <div class="form-group">
-        <img id="SquadraLogo" src="" alt="Logo Squadra" style="display:none; width:100px;" />
-    </div>
+                <div class="form-check mb-3">
+                    <input asp-for="IsSpeciale" type="checkbox" class="form-check-input" />
+                    <label asp-for="IsSpeciale" class="form-check-label">Maglia Speciale</label>
+                </div>
+            </div>
 
-    <div class="form-group">
-        <img id="SquadraLogo" src="" alt="Logo Squadra" style="display:none; max-width: 100px; max-height: 100px;" />
-    </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ImmagineUrl">Immagine Maglia</label>
+                    <input type="file" asp-for="ImmagineUrl" class="form-control-file" />
+                </div>
+
+                <div class="mt-4">
+                    <img id="SquadraLogo" src="" alt="Logo Squadra" style="display:none; max-width: 150px; max-height: 150px;" class="img-fluid" />
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">Crea Maglia</button>
+        </div>
+    </form>
+</div>
 
 
-    <div class="form-group">
-        <label asp-for="ImmagineUrl">Immagine Maglia</label>
-        <input type="file" asp-for="ImmagineUrl" class="form-control-file" />
-    </div>
-
-
-    <div class="form-group">
-        <label asp-for="IsSpeciale"></label>
-        <input asp-for="IsSpeciale" type="checkbox" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Salva</button>
-</form>
 
 
 

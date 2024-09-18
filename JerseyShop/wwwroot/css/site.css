@@ -1,4 +1,21 @@
+body {
+    background-image: url('/images/JerseyShopBackground.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.main-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: white;
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
 /* Stile del banner */
+
+
 .hero-banner {
     background-color: #2e2e2e; /* Verde scuro */
     padding: 30px 0; /* Altezza ridotta */
@@ -25,4 +42,44 @@
     .league-logo-circle:hover {
         border-color: #007bff; /* Cambia colore del bordo al passaggio del mouse */
         transform: scale(1.1); /* Ingrandisce il cerchio al passaggio del mouse */
+    }
+/* Stile del banner */
+.hero-banner {
+    background-color: #2e2e2e;
+    padding: 50px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.banner-jersey {
+    max-width: 80%;
+    transition: transform 0.3s ease;
+}
+
+.left-jersey {
+    transform: rotate(-15deg) translateX(-20px);
+}
+
+.right-jersey {
+    transform: rotate(15deg) translateX(20px);
+}
+
+.hero-banner:hover .left-jersey {
+    transform: rotate(-5deg) translateX(0);
+}
+
+.hero-banner:hover .right-jersey {
+    transform: rotate(5deg) translateX(0);
+}
+
+.hero-banner .btn-primary {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    transition: all 0.3s ease;
+}
+
+    .hero-banner .btn-primary:hover {
+        background-color: #45a049;
+        border-color: #45a049;
+        transform: scale(1.05);
     }
