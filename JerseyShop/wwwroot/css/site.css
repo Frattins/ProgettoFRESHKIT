@@ -5,12 +5,73 @@ body {
     background-attachment: fixed;
 }
 
-.main-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    background-color: white;
-    min-height: 100vh;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+.container-fluid {
+    width: 96vw;
+    margin: auto;
+    background-color: #f9f9f9; /* Un bianco leggermente off-white */
+    min-height: 90vh;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #f8f9fa !important;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.hero-banner {
+    background-color: #2e2e2e;
+    color: #ffffff;
+    padding: 50px 0;
+    margin-bottom: 30px;
+    border-radius: 10px;
+}
+
+.league-logo-circle {
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+.mb-4 {
+    margin-bottom: 2rem !important;
+}
+
+body {
+    color: #333333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #2c3e50;
+}
+
+.logo-container {
+    top: 80px; /* Aggiusta questo valore in base all'altezza della tua navbar */
+    padding-top: 20px;
+}
+
+.league-logo {
+    max-width: 80%;
+    margin: 0 auto 20px;
+    display: block;
+}
+
+.sticky-top {
+    top: 80px; /* Aggiusta questo valore se necessario */
 }
 
 /* Stile del banner */
@@ -119,3 +180,4 @@ body {
         background-color: #c82333;
         border-color: #bd2130;
     }
+

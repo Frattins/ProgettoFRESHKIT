@@ -1,51 +1,69 @@
 ﻿@model IEnumerable<JerseyShop.Models.Maglia>
 
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Maglie della Ligue 1</h2>
-
-    <div class="row mb-4">
-        <div class="col-md-6 offset-md-3">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="teamFilter">Filtra per squadra:</label>
-                </div>
-                <select id="teamFilter" class="custom-select" onchange="filterByTeam()">
-                    <option value="">Tutte le squadre</option>
-                    @foreach (var team in Model.Select(m => m.Squadra).Distinct().OrderBy(t => t))
-                    {
-                        <option value="@team">@team</option>
-                    }
-                </select>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 mt-5 d-none d-md-block">
+            <div class="sticky-top" style="top: 100px;">
+                <img src="/images/ligue-1-2024-logo.png" alt="Premier League Logo" class="img-fluid mb-3">
+                <img src="/images/ligue-1-2024-logo.png" alt="Premier League Logo" class="img-fluid mb-3">
+                <!-- Ripeti l'immagine del logo quante volte desideri -->
             </div>
         </div>
-    </div>
+        <div class="col-md-8">
+            <h2 class="text-center mb-4">Maglie della Ligue 1</h2>
 
-    <div class="row maglie-list">
-        @foreach (var maglia in Model)
-        {
-            <div class="col-lg-4 col-md-6 mb-4 maglia-item" data-team="@maglia.Squadra">
-                <div class="card h-100 shadow-sm">
-                    <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="height: 250px; object-fit: contain;">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">@maglia.Nome</h5>
-                        <p class="card-text mt-auto">
-                            <strong>@maglia.Prezzo.ToString("C")</strong>
-                        </p>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <a href="/Maglia/Details/@maglia.Id" class="btn btn-outline-secondary btn-sm">Dettagli</a>
-                            <div>
-                                <button class="btn btn-outline-primary btn-sm add-to-cart" data-maglia-id="@maglia.Id" title="Aggiungi al carrello">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </button>
-                                <button class="btn btn-outline-danger btn-sm toggle-favorite" data-maglia-id="@maglia.Id" title="Aggiungi/Rimuovi dai preferiti">
-                                    <i class="@(maglia.IsFavorite ? "fas" : "far") fa-heart"></i>
-                                </button>
-                            </div>
+            <div class="row mb-4">
+                <div class="col-md-6 offset-md-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="teamFilter">Filtra per squadra:</label>
                         </div>
+                        <select id="teamFilter" class="custom-select" onchange="filterByTeam()">
+                            <option value="">Tutte le squadre</option>
+                            @foreach (var team in Model.Select(m => m.Squadra).Distinct().OrderBy(t => t))
+                            {
+                                <option value="@team">@team</option>
+                            }
+                        </select>
                     </div>
                 </div>
             </div>
-        }
+
+            <div class="row maglie-list">
+                @foreach (var maglia in Model)
+                {
+                    <div class="col-lg-4 col-md-6 mb-4 maglia-item" data-team="@maglia.Squadra">
+                        <div class="card h-100 shadow-sm">
+                            <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="height: 250px; object-fit: contain;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">@maglia.Nome</h5>
+                                <p class="card-text mt-auto">
+                                    <strong>@maglia.Prezzo.ToString("C")</strong>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <a href="/Maglia/Details/@maglia.Id" class="btn btn-outline-secondary btn-sm">Dettagli</a>
+                                    <div>
+                                        <button class="btn btn-outline-primary btn-sm add-to-cart" data-maglia-id="@maglia.Id" title="Aggiungi al carrello">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm toggle-favorite" data-maglia-id="@maglia.Id" title="Aggiungi/Rimuovi dai preferiti">
+                                            <i class="@(maglia.IsFavorite ? "fas" : "far") fa-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-2 mt-5 d-none d-md-block">
+            <div class="sticky-top" style="top: 100px;">
+                <img src="/images/ligue-1-2024-logo.png" alt="Premier League Logo" class="img-fluid mb-3">
+                <img src="/images/ligue-1-2024-logo.png" alt="Premier League Logo" class="img-fluid mb-3">
+                <!-- Ripeti l'immagine del logo quante volte desideri -->
+            </div>
+        </div>
     </div>
 </div>
 

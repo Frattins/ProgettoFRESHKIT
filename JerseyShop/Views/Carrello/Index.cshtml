@@ -13,6 +13,7 @@ else
                 <th>Nome</th>
                 <th>Prezzo Unitario</th>
                 <th>Quantità</th>
+                <th>Taglia</th>
                 <th>Prezzo Totale</th>
                 <th>Azioni</th>
             </tr>
@@ -47,6 +48,18 @@ else
                             <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
                         </form>
                     </td>
+                    <td>
+<td>
+    <select class="form-control change-size" data-maglia-id="@item.MagliaId">
+<option value="S" @(item.Size == "S" ? "selected='selected'" : "")>S</option>
+<option value="M" @(item.Size == "M" ? "selected='selected'" : "")>M</option>
+<option value="L" @(item.Size == "L" ? "selected='selected'" : "")>L</option>
+<option value="XL" @(item.Size == "XL" ? "selected='selected'" : "")>XL</option>
+
+    </select>
+</td>
+
+                    </td>
                     <td>@item.PrezzoTotale.ToString("C")</td>
                     <td>
                         <form method="post" action="@Url.Action("Rimuovi", "Carrello")">
@@ -59,11 +72,35 @@ else
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="4"><strong>Totale</strong></td>
+                <td colspan="5"><strong>Totale</strong></td>
                 <td><strong>@Model.Totale.ToString("C")</strong></td>
                 <td></td>
             </tr>
         </tfoot>
     </table>
     <a href="@Url.Action("Checkout", "Ordine")" class="btn btn-primary">Procedi al Checkout</a>
+}
+
+@section Scripts {
+    <script>
+        $('.change-size').on('change', function() {
+            var magliaId = $(this).data('maglia-id');
+            var newSize = $(this).val();
+            $.ajax({
+                url: '@Url.Action("CambiaTaglia", "Carrello")',
+                type: 'POST',
+                data: { magliaId: magliaId, newSize: newSize },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success('Taglia aggiornata con successo!');
+                    } else {
+                        toastr.error('Si è verificato un errore durante l\'aggiornamento della taglia.');
+                    }
+                },
+                error: function() {
+                    toastr.error('Si è verificato un errore durante l\'aggiornamento della taglia.');
+                }
+            });
+        });
+    </script>
 }

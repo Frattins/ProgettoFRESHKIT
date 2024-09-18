@@ -126,7 +126,7 @@ namespace JerseyShop.Controllers
             return maglia;
         }
         [HttpPost]
-        public IActionResult Aggiungi(int magliaId, string customName, int? customNumber)
+        public IActionResult Aggiungi(int magliaId, string size, string customName = null, int? customNumber = null)
         {
             var carrello = HttpContext.Session.GetObject<Carrello>(GetCarrelloSessionKey()) ?? new Carrello();
             var maglia = GetMagliaById(magliaId);
@@ -137,10 +137,10 @@ namespace JerseyShop.Controllers
             }
 
             var item = carrello.Items.FirstOrDefault(i => i.MagliaId == magliaId &&
+                                                          i.Size == size &&
                                                           i.CustomName == customName &&
                                                           i.CustomNumber == customNumber);
 
-            // Aggiungere 20€ se è presente una personalizzazione
             decimal prezzoFinale = maglia.Prezzo;
             if (!string.IsNullOrEmpty(customName) || customNumber.HasValue)
             {
@@ -154,9 +154,10 @@ namespace JerseyShop.Controllers
                     MagliaId = magliaId,
                     Nome = maglia.Nome,
                     Descrizione = maglia.Descrizione,
-                    PrezzoUnitario = prezzoFinale,     // Prezzo personalizzato se applicabile
+                    PrezzoUnitario = prezzoFinale,
                     Quantità = 1,
                     ImmagineUrl = maglia.ImmagineUrl,
+                    Size = size,
                     CustomName = customName,
                     CustomNumber = customNumber
                 });
@@ -168,7 +169,21 @@ namespace JerseyShop.Controllers
 
             HttpContext.Session.SetObject(GetCarrelloSessionKey(), carrello);
 
-            return RedirectToAction("Index");
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public IActionResult CambiaTaglia(int magliaId, string newSize)
+        {
+            var carrello = HttpContext.Session.GetObject<Carrello>(GetCarrelloSessionKey());
+            var item = carrello.Items.FirstOrDefault(i => i.MagliaId == magliaId);
+            if (item != null)
+            {
+                item.Size = newSize;
+                HttpContext.Session.SetObject(GetCarrelloSessionKey(), carrello);
+                return Json(new { success = true });
+            }
+            return Json(new { success = false });
         }
     }
 }

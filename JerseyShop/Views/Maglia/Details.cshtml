@@ -22,6 +22,15 @@
                 <i class="@(Model.IsFavorite ? "fas" : "far") fa-heart"></i>
                 @(Model.IsFavorite ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti")
             </button>
+            <div class="form-group">
+                <label for="size">Taglia:</label>
+                <select class="form-control" id="size" name="size">
+                    <option value="S">S</option>
+                    <option value="M" selected>M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                </select>
+            </div>
 
             @if (!Model.IsSpeciale)
             {
@@ -136,6 +145,12 @@
 
 @section Scripts {
     <script>
+        // Taglie
+        $('#addToCartBtn').on('click', function () {
+            var magliaId = $(this).data('maglia-id');
+            var size = $('#size').val();
+            addToCart(magliaId, size);
+        });
         $(document).ready(function () {
             // Mostra o nasconde le opzioni di personalizzazione
             $("#customizeCheckbox").change(function () {

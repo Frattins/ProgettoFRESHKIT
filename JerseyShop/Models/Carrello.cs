@@ -15,6 +15,7 @@ namespace JerseyShop.Models
         public string Descrizione { get; set; } // Descrizione della maglia
         public decimal PrezzoUnitario { get; set; }
         public int Quantità { get; set; }
+        public string Size { get; set; }
         public decimal PrezzoTotale => PrezzoUnitario * Quantità; // Prezzo totale in base alla quantità
         public string ImmagineUrl { get; set; }
         public string CustomName { get; set; } // Nome personalizzato
