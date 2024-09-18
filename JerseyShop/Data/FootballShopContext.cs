@@ -12,11 +12,22 @@ namespace JerseyShop.Data
         public DbSet<Ordine> Ordini { get; set; }
         public DbSet<DettaglioOrdine> DettagliOrdini { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Maglia)
+                .WithMany(m => m.Reviews)
+                .HasForeignKey(r => r.MagliaId);
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(r => r.UserId);
         }
 
 

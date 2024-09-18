@@ -1,0 +1,114 @@
+﻿@model JerseyShop.Models.Maglia
+
+<div class="container mt-4">
+    <h2>Modifica Maglia</h2>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ImmagineUrl" />
+        <input type="hidden" asp-for="Campionato" />
+        <input type="hidden" asp-for="Squadra" />
+
+        <div class="form-group">
+            <label asp-for="Nome">Nome</label>
+            <input asp-for="Nome" class="form-control" />
+            <span asp-validation-for="Nome" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Prezzo">Prezzo</label>
+            <input asp-for="Prezzo" class="form-control" />
+            <span asp-validation-for="Prezzo" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Descrizione">Descrizione</label>
+            <textarea asp-for="Descrizione" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Descrizione" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Campionato: @Model.Campionato</label>
+        </div>
+
+        <div class="form-group">
+            <label>Squadra: @Model.Squadra</label>
+        </div>
+
+        <img src="/images/Maglie/@Model.ImmagineUrl" alt="@Model.Nome" style="max-width: 200px;" class="mb-3" />
+
+        <h4 class="mt-4">Recensioni</h4>
+        @if (Model.Reviews != null && Model.Reviews.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Utente</th>
+                        <th>Valutazione</th>
+                        <th>Commento</th>
+                        <th>Azione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <tr>
+                            <td>@review.User.UserName</td>
+                            <td>@review.Rating</td>
+                            <td>@review.Comment</td>
+                            <td>
+                                <a href="@Url.Action("DeleteReview", "Maglia", new { id = review.Id, magliaId = Model.Id })" class="btn btn-danger btn-sm delete-review">
+                                    Elimina
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Nessuna recensione presente.</p>
+        }
+
+        <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+        <a asp-action="Index" class="btn btn-secondary">Torna alla lista</a>
+    </form>
+</div>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Conferma azione</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Sei sicuro di voler eliminare questa recensione?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Elimina</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.delete-review').on('click', function (e) {
+                e.preventDefault();
+                var deleteUrl = $(this).attr('href');
+
+                $('#confirmationModal').modal('show');
+
+                $('#confirmDeleteBtn').off('click').on('click', function () {
+                    window.location.href = deleteUrl;
+                });
+            });
+        });
+    </script>
+}

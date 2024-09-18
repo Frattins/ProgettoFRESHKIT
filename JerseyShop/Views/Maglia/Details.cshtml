@@ -51,66 +51,67 @@
     </div>
 </div>
 
-<script>
-    // Mostra o nasconde le opzioni di personalizzazione
-    document.getElementById("customizeCheckbox").addEventListener("change", function () {
-        var customizationOptions = document.getElementById("customizationOptions");
-        if (this.checked) {
-            customizationOptions.style.display = "block";
-        } else {
-            customizationOptions.style.display = "none";
-        }
-    });
-
-    // Aggiunta al carrello con personalizzazione
-    document.getElementById("addToCartBtn").addEventListener("click", function (e) {
-        e.preventDefault();
-        var customizeChecked = document.getElementById("customizeCheckbox").checked;
-        var customName = document.getElementById("customName").value;
-        var customNumber = document.getElementById("customNumber").value;
-
-        var formData = new FormData();
-        formData.append("magliaId", @Model.Id);
-        if (customizeChecked) {
-            formData.append("customName", customName);
-            formData.append("customNumber", customNumber);
-        }
-
-        fetch("/Carrello/Aggiungi", {
-            method: "POST",
-            body: formData
-        }).then(response => {
-            if (response.ok) {
-                window.location.href = "/Carrello/Index";
+<div class="container mt-4">
+    <h3 class="mt-5">Recensioni</h3>
+    @if (Model.Reviews != null && Model.Reviews.Any())
+    {
+        <div class="row">
+            @foreach (var review in Model.Reviews)
+            {
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @for (int i = 0; i < review.Rating; i++)
+                                {
+                                    <i class="fas fa-star text-warning"></i>
+                                }
+                                @for (int i = review.Rating; i < 5; i++)
+                                {
+                                    <i class="far fa-star text-warning"></i>
+                                }
+                            </h5>
+                            <p class="card-text">@review.Comment</p>
+                            <p class="card-text"><small class="text-muted">@review.User.UserName - @review.CreatedAt.ToString("d MMMM yyyy")</small></p>
+                        </div>
+                    </div>
+                </div>
             }
-        });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('.toggle-favorite').on('click', function () {
-            var btn = $(this);
-            var magliaId = btn.data('maglia-id');
+        </div>
+    }
+    else
+    {
+        <p>Nessuna recensione disponibile per questa maglia.</p>
+    }
 
-            $.ajax({
-                url: '/Favorites/ToggleFavorite',
-                type: 'POST',
-                data: { magliaId: magliaId },
-                success: function (data) {
-                    if (data.isFavorite) {
-                        btn.find('i').removeClass('far').addClass('fas');
-                        btn.text('Rimuovi dai preferiti');
-                    } else {
-                        btn.find('i').removeClass('fas').addClass('far');
-                        btn.text('Aggiungi ai preferiti');
-                    }
-                },
-                error: function () {
-                    alert('Si è verificato un errore durante l\'aggiornamento dei preferiti.');
-                }
-            });
-        });
-    });
+    @if (User.Identity.IsAuthenticated)
+    {
+        <h4 class="mt-4">Aggiungi una recensione</h4>
+        <form asp-action="AddReview" asp-controller="Maglia" method="post">
+            <input type="hidden" name="magliaId" value="@Model.Id" />
+            <div class="form-group">
+                <label for="rating">Valutazione</label>
+                <select name="rating" id="rating" class="form-control" required>
+                    <option value="">Seleziona una valutazione</option>
+                    <option value="1">1 stella</option>
+                    <option value="2">2 stelle</option>
+                    <option value="3">3 stelle</option>
+                    <option value="4">4 stelle</option>
+                    <option value="5">5 stelle</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="comment">Commento</label>
+                <textarea name="comment" id="comment" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Invia recensione</button>
+        </form>
+    }
+    else
+    {
+        <p>Per lasciare una recensione, <a asp-controller="Account" asp-action="Login">accedi</a> o <a asp-controller="Account" asp-action="Register">registrati</a>.</p>
+    }
+</div>
 
 @functions {
     public string GetCampionatoLogo(string campionato)
@@ -131,4 +132,68 @@
                 return "/images/default-league-logo.png";
         }
     }
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Mostra o nasconde le opzioni di personalizzazione
+            $("#customizeCheckbox").change(function () {
+                $("#customizationOptions").toggle(this.checked);
+            });
+
+            // Aggiunta al carrello con personalizzazione
+            $("#addToCartBtn").click(function (e) {
+                e.preventDefault();
+                var customizeChecked = $("#customizeCheckbox").is(":checked");
+                var customName = $("#customName").val();
+                var customNumber = $("#customNumber").val();
+
+                var formData = new FormData();
+                formData.append("magliaId", @Model.Id);
+                if (customizeChecked) {
+                    formData.append("customName", customName);
+                    formData.append("customNumber", customNumber);
+                }
+
+                $.ajax({
+                    url: "/Carrello/Aggiungi",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        window.location.href = "/Carrello/Index";
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Errore nell'aggiunta al carrello:", error);
+                    }
+                });
+            });
+
+            $('.toggle-favorite').click(function (e) {
+                e.preventDefault();
+                var btn = $(this);
+                var magliaId = btn.data('maglia-id');
+
+                $.ajax({
+                    url: '/Favorites/ToggleFavorite',
+                    type: 'POST',
+                    data: { magliaId: magliaId },
+                    success: function (data) {
+                        if (data.isFavorite) {
+                            btn.find('i').removeClass('far').addClass('fas');
+                            btn.text('Rimuovi dai preferiti');
+                        } else {
+                            btn.find('i').removeClass('fas').addClass('far');
+                            btn.text('Aggiungi ai preferiti');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Errore durante l\'aggiornamento dei preferiti:', error);
+                    }
+                });
+            });
+        });
+    </script>
 }

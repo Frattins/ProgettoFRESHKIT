@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace JerseyShop.Controllers
 {
@@ -16,11 +17,13 @@ namespace JerseyShop.Controllers
     {
         private readonly FootballShopContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public MagliaController(FootballShopContext context, IWebHostEnvironment webHostEnvironment)
+        public MagliaController(FootballShopContext context, IWebHostEnvironment webHostEnvironment, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
         }
 
         // Admin Index - Display all maglie (admin only)
@@ -156,16 +159,106 @@ namespace JerseyShop.Controllers
         }
         public async Task<IActionResult> Details(int id)
         {
-            var jersey = await _context.Maglie.FindAsync(id);
+            var maglia = await _context.Maglie
+                .Include(m => m.Reviews)
+                .ThenInclude(r => r.User)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (jersey == null)
+            if (maglia == null)
             {
                 return NotFound();
             }
 
-            return View(jersey);
+            return View(maglia);
         }
 
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddReview(int magliaId, int rating, string comment)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var review = new Review
+            {
+                MagliaId = magliaId,
+                UserId = user.Id,
+                Rating = rating,
+                Comment = comment,
+                CreatedAt = DateTime.Now
+            };
+
+            _context.Reviews.Add(review);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = magliaId });
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var maglia = await _context.Maglie
+                .Include(m => m.Reviews)
+                .ThenInclude(r => r.User)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (maglia == null)
+            {
+                return NotFound();
+            }
+
+            return View(maglia);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Prezzo,Descrizione,ImmagineUrl,Campionato,Squadra")] Maglia maglia)
+        {
+            if (id != maglia.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(maglia);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!MagliaExists(maglia.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(maglia);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteReview(int id, int magliaId)
+        {
+            var review = await _context.Reviews.FindAsync(id);
+            if (review != null)
+            {
+                _context.Reviews.Remove(review);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Edit), new { id = magliaId });
+        }
+
+        private bool MagliaExists(int id)
+        {
+            return _context.Maglie.Any(e => e.Id == id);
+        }
     }
 
 }
+
+

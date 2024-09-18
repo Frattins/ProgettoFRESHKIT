@@ -26,5 +26,6 @@ namespace JerseyShop.Models
         [Required]
         public string Squadra { get; set; }
         public bool IsFavorite { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }
