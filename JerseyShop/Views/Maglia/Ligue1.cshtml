@@ -16,11 +16,11 @@
     @foreach (var maglia in Model)
     {
         <div class="maglia-item card" style="width: 18rem;">
-            <img href="/Maglia/Details/@maglia.Id" src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="max-height: 200px;object-fit: contain;">
+            <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="max-height: 200px;object-fit: contain;">
             <div class="card-body">
                 <h5 class="card-title">@maglia.Nome</h5>
                 <p class="card-text">@maglia.Prezzo €</p>
-                <a href="/Maglia/Details/@maglia.Id" class="btn btn-secondary">Vedi Dettagli</a>
+                <a href="/Carrello/Aggiungi?magliaId=@maglia.Id" class="btn btn-primary">Aggiungi al Carrello</a>
 
             </div>
         </div>

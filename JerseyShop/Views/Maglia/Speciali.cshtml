@@ -7,11 +7,11 @@
     {
         <div class="col-md-4">
             <div class="maglia-special-item card mb-4" style="background: linear-gradient(135deg, #ffd700, #ff6347); border-radius: 15px; box-shadow: 0px 5px 15px rgba(0,0,0,0.3);">
-                <img href="/Maglia/Details/@maglia.Id" src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="border-radius: 15px;max-height: 200px;object-fit: contain;; filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.5));">
+                <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="border-radius: 15px; max-height: 200px; filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.5));">
                 <div class="card-body text-center">
                     <h5 class="card-title" style="font-size: 1.5rem; color: #fff;">@maglia.Nome</h5>
                     <p class="card-text" style="font-size: 1.2rem; color: #fff;">@maglia.Prezzo €</p>
-                    <a href="/Maglia/Details/@maglia.Id" class="btn btn-secondary">Vedi Dettagli</a>
+                    <a href="/Carrello/Aggiungi?magliaId=@maglia.Id" class="btn btn-light btn-lg" style="border-radius: 30px;">Aggiungi al Carrello</a>
                 </div>
             </div>
         </div>
