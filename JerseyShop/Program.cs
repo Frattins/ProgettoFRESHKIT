@@ -24,7 +24,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => {
 
 // Aggiungi supporto per la cache e la sessione
 builder.Services.AddDistributedMemoryCache();
-
+builder.Services.AddControllersWithViews()
+    .AddApplicationPart(typeof(FavoritesController).Assembly);
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30); // Imposta il timeout della sessione

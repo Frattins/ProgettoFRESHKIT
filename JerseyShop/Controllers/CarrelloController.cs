@@ -125,6 +125,50 @@ namespace JerseyShop.Controllers
 
             return maglia;
         }
+        [HttpPost]
+        public IActionResult Aggiungi(int magliaId, string customName, int? customNumber)
+        {
+            var carrello = HttpContext.Session.GetObject<Carrello>(GetCarrelloSessionKey()) ?? new Carrello();
+            var maglia = GetMagliaById(magliaId);
 
+            if (maglia == null)
+            {
+                return NotFound();
+            }
+
+            var item = carrello.Items.FirstOrDefault(i => i.MagliaId == magliaId &&
+                                                          i.CustomName == customName &&
+                                                          i.CustomNumber == customNumber);
+
+            // Aggiungere 20€ se è presente una personalizzazione
+            decimal prezzoFinale = maglia.Prezzo;
+            if (!string.IsNullOrEmpty(customName) || customNumber.HasValue)
+            {
+                prezzoFinale += 20;
+            }
+
+            if (item == null)
+            {
+                carrello.Items.Add(new CarrelloItem
+                {
+                    MagliaId = magliaId,
+                    Nome = maglia.Nome,
+                    Descrizione = maglia.Descrizione,
+                    PrezzoUnitario = prezzoFinale,     // Prezzo personalizzato se applicabile
+                    Quantità = 1,
+                    ImmagineUrl = maglia.ImmagineUrl,
+                    CustomName = customName,
+                    CustomNumber = customNumber
+                });
+            }
+            else
+            {
+                item.Quantità++;
+            }
+
+            HttpContext.Session.SetObject(GetCarrelloSessionKey(), carrello);
+
+            return RedirectToAction("Index");
+        }
     }
 }

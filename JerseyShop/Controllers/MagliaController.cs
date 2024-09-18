@@ -154,5 +154,18 @@ namespace JerseyShop.Controllers
             }
             return RedirectToAction("Index");  // Redirect to the admin index after deletion
         }
+        public async Task<IActionResult> Details(int id)
+        {
+            var jersey = await _context.Maglie.FindAsync(id);
+
+            if (jersey == null)
+            {
+                return NotFound();
+            }
+
+            return View(jersey);
+        }
+
     }
+
 }

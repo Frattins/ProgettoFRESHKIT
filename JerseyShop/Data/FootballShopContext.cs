@@ -11,6 +11,7 @@ namespace JerseyShop.Data
         public DbSet<Maglia> Maglie { get; set; }
         public DbSet<Ordine> Ordini { get; set; }
         public DbSet<DettaglioOrdine> DettagliOrdini { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

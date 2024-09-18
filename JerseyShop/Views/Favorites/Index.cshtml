@@ -1,0 +1,34 @@
+﻿@model IEnumerable<JerseyShop.Models.Maglia>
+
+<h2>I tuoi Preferiti</h2>
+
+@if (!Model.Any())
+{
+    <p>Non hai ancora aggiunto maglie ai preferiti.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var maglia in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@Url.Content("~/images/Maglie/" + maglia.ImmagineUrl)" class="card-img-top" alt="@maglia.Nome">
+                    <div class="card-body">
+                        <h5 class="card-title">@maglia.Nome</h5>
+                        <p class="card-text">@maglia.Prezzo.ToString("C")</p>
+                        <div class="d-flex justify-content-between">
+                            <a href="@Url.Action("Details", "Maglia", new { id = maglia.Id })" class="btn btn-primary">Vedi Dettagli</a>
+                            <button class="btn btn-outline-primary add-to-cart" data-maglia-id="@maglia.Id">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                            <button class="btn btn-outline-danger toggle-favorite" data-maglia-id="@maglia.Id">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

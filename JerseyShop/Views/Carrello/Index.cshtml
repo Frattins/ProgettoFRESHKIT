@@ -1,7 +1,5 @@
 ﻿@model JerseyShop.Models.Carrello
-
 <h2>Il tuo Carrello</h2>
-
 @if (Model.Items.Count == 0)
 {
     <p>Il carrello è vuoto.</p>
@@ -26,7 +24,17 @@ else
                     <td>
                         <img src="/images/Maglie/@item.ImmagineUrl" alt="@item.Nome" style="width: 50px; height: 50px; object-fit: cover;" />
                     </td>
-                    <td>@item.Nome</td>
+                    <td>
+                        @item.Nome
+                        <br />
+                        @if (!string.IsNullOrEmpty(item.CustomName) || item.CustomNumber.HasValue)
+                        {
+                            <div class="text-muted">
+                                <small>Nome: @item.CustomName, Numero: @(item.CustomNumber.HasValue ? item.CustomNumber.Value.ToString() : "N/A")</small>
+                                <small>(+20€)</small>
+                            </div>
+                        }
+                    </td>
                     <td>@item.PrezzoUnitario.ToString("C")</td>
                     <td>
                         <form method="post" action="@Url.Action("DecrementaQuantita", "Carrello")" style="display:inline-block;">
@@ -49,17 +57,13 @@ else
                 </tr>
             }
         </tbody>
-
         <tfoot>
             <tr>
-                <td colspan="3"><strong>Totale</strong></td>
+                <td colspan="4"><strong>Totale</strong></td>
                 <td><strong>@Model.Totale.ToString("C")</strong></td>
                 <td></td>
             </tr>
         </tfoot>
     </table>
-
     <a href="@Url.Action("Checkout", "Ordine")" class="btn btn-primary">Procedi al Checkout</a>
-
-
 }

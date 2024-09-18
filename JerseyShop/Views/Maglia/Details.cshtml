@@ -1,0 +1,105 @@
+﻿@model JerseyShop.Models.Maglia
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 text-center position-relative">
+            @if (!Model.IsSpeciale)
+            {
+                <div class="d-flex justify-content-center mb-3">
+                    <img src="@GetCampionatoLogo(Model.Campionato)" alt="@Model.Campionato" style="max-height: 50px; margin-right: 20px;" />
+                </div>
+            }
+
+            <!-- Immagine della maglia -->
+            <img src="/images/Maglie/@Model.ImmagineUrl" alt="@Model.Nome" class="img-fluid" style="max-height: 400px;">
+        </div>
+
+        <div class="col-md-6">
+            <h1>@Model.Nome</h1>
+            <p><strong>Prezzo:</strong> @Model.Prezzo.ToString("C")</p>
+            <p><strong>Descrizione:</strong> @Model.Descrizione</p>
+
+            @if (!Model.IsSpeciale)
+            {
+                <p><strong>Campionato:</strong> @Model.Campionato</p>
+                <p><strong>Squadra:</strong> @Model.Squadra</p>
+            }
+
+            <h4>Personalizza la tua maglia</h4>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="customizeCheckbox" />
+                <label class="form-check-label" for="customizeCheckbox">Personalizza</label>
+            </div>
+            <div id="customizationOptions" style="display:none;">
+                <div class="form-group">
+                    <label for="customName">Nome</label>
+                    <input type="text" class="form-control" id="customName" placeholder="Inserisci il nome" />
+                </div>
+                <div class="form-group">
+                    <label for="customNumber">Numero</label>
+                    <input type="number" class="form-control" id="customNumber" placeholder="Inserisci il numero" />
+                </div>
+                <p>Il costo della personalizzazione è: 20€</p>
+            </div>
+
+            <button id="addToCartBtn" class="btn btn-primary mt-3">Aggiungi al Carrello</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mostra o nasconde le opzioni di personalizzazione
+    document.getElementById("customizeCheckbox").addEventListener("change", function () {
+        var customizationOptions = document.getElementById("customizationOptions");
+        if (this.checked) {
+            customizationOptions.style.display = "block";
+        } else {
+            customizationOptions.style.display = "none";
+        }
+    });
+
+    // Aggiunta al carrello con personalizzazione
+    document.getElementById("addToCartBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+        var customizeChecked = document.getElementById("customizeCheckbox").checked;
+        var customName = document.getElementById("customName").value;
+        var customNumber = document.getElementById("customNumber").value;
+
+        var formData = new FormData();
+        formData.append("magliaId", @Model.Id);
+        if (customizeChecked) {
+            formData.append("customName", customName);
+            formData.append("customNumber", customNumber);
+        }
+
+        fetch("/Carrello/Aggiungi", {
+            method: "POST",
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = "/Carrello/Index";
+            }
+        });
+    });
+</script>
+
+@functions {
+    public string GetCampionatoLogo(string campionato)
+    {
+        switch (campionato)
+        {
+            case "Premier League":
+                return "/images/premier-league-2016-logo.png";
+            case "Serie A":
+                return "/images/serie-a-2019-2021-logo.png";
+            case "La Liga":
+                return "/images/la-liga-2023-logo.png";
+            case "Bundesliga":
+                return "/images/bundesliga-logo.png";
+            case "Ligue 1":
+                return "/images/ligue-1-2024-logo.png";
+            default:
+                return "/images/default-league-logo.png";
+        }
+    }
+}

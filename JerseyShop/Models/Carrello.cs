@@ -12,9 +12,13 @@ namespace JerseyShop.Models
     {
         public int MagliaId { get; set; }
         public string Nome { get; set; }
+        public string Descrizione { get; set; } // Descrizione della maglia
         public decimal PrezzoUnitario { get; set; }
         public int Quantità { get; set; }
-        public decimal PrezzoTotale => PrezzoUnitario * Quantità;
-        public string ImmagineUrl { get; set; } 
+        public decimal PrezzoTotale => PrezzoUnitario * Quantità; // Prezzo totale in base alla quantità
+        public string ImmagineUrl { get; set; }
+        public string CustomName { get; set; } // Nome personalizzato
+        public int? CustomNumber { get; set; } // Numero personalizzato
     }
+
 }

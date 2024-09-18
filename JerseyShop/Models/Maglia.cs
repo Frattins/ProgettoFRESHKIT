@@ -25,5 +25,6 @@ namespace JerseyShop.Models
 
         [Required]
         public string Squadra { get; set; }
+        public bool IsFavorite { get; set; }
     }
 }
