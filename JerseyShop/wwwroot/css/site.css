@@ -5,11 +5,23 @@ body {
     background-attachment: fixed;
 }
 
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    justify-content: space-evenly;
+}
+
+
+
 .container-fluid {
     width: 96vw;
     margin: auto;
-    background-color: #f9f9f9; /* Un bianco leggermente off-white */
-    min-height: 90vh;
+    background-color: aliceblue; /* Un bianco leggermente off-white */
+    min-height: 96vh;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
     border-radius: 10px;
     margin-top: 20px;
@@ -48,11 +60,12 @@ body {
     margin: 0 auto 20px;
     display: block;
 }
+
 .navbar {
     position: sticky;
     top: 0;
     z-index: 1000;
-    background-color: #f8f9fa !important;
+    background-color: aliceblue !important;
     border-bottom: 1px solid #e9ecef;
 }
 
@@ -215,4 +228,3 @@ h1, h2, h3, h4, h5, h6 {
         background-color: #c82333;
         border-color: #bd2130;
     }
-
