@@ -1,11 +1,12 @@
 ﻿@model JerseyShop.Models.Carrello
+
 <h2 class="text-center mb-5">Riepilogo Ordine</h2>
 <div class="container">
     <table class="table table-striped">
         <thead class="thead-dark">
             <tr>
                 <th>Prodotto</th>
-                <th>Taglia</th>
+                <th>Taglia</th> <!-- Aggiungi colonna per la taglia -->
                 <th>Quantità</th>
                 <th>Prezzo</th>
                 <th>Totale</th>
@@ -23,7 +24,8 @@
                             <small>Personalizzazione: @item.CustomName @item.CustomNumber</small>
                         }
                     </td>
-                    <td>@item.Size</td>
+                    <td>@(string.IsNullOrEmpty(item.Size) ? "N/A" : item.Size)</td>
+
                     <td>@item.Quantità</td>
                     <td>@item.PrezzoUnitario.ToString("C")</td>
                     <td>@item.PrezzoTotale.ToString("C")</td>
@@ -37,13 +39,52 @@
             </tr>
         </tfoot>
     </table>
+</div>
 
-    <!-- ... resto del codice per il pagamento fittizio ... -->
+
+    <!-- Modulo per il pagamento fittizio -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form id="fake-payment-form" class="bg-light p-4 border rounded">
+                <div class="form-group">
+                    <label for="card-number">Numero della Carta</label>
+                    <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456" required>
+                </div>
+                <div class="form-group">
+                    <label for="card-expiration">Data di Scadenza</label>
+                    <input type="text" id="card-expiration" class="form-control" placeholder="MM/YY" required>
+                </div>
+                <div class="form-group">
+                    <label for="card-cvc">CVC</label>
+                    <input type="text" id="card-cvc" class="form-control" placeholder="123" required>
+                </div>
+                <!-- Bottone Paga Ora -->
+                <button id="checkout-button" class="btn btn-success btn-lg btn-block mt-4" type="submit">
+                    <i class="fas fa-lock"></i> Paga ora €@Model.Totale.ToString("C")
+                </button>
+                <!-- Barra di caricamento nascosta, verrà visualizzata durante il pagamento -->
+                <div id="payment-processing" class="progress mt-4" style="display: none;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%;"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 </div>
 
 @section Scripts {
     <script>
-        // ... script esistente per il pagamento fittizio ...
+        document.getElementById('fake-payment-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            // Nascondi il bottone e mostra la barra di caricamento
+            document.getElementById('checkout-button').style.display = 'none';
+            document.getElementById('payment-processing').style.display = 'block';
+            // Simula un ritardo di pagamento di 3 secondi
+            setTimeout(function () {
+                // Dopo il pagamento fittizio, reindirizza alla pagina di conferma
+                window.location.href = '/Ordine/PagamentoCompletato';
+            }, 3000);
+        });
     </script>
 }

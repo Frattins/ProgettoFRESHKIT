@@ -136,15 +136,13 @@ namespace JerseyShop.Controllers
                 return NotFound();
             }
 
-            var item = carrello.Items.FirstOrDefault(i => i.MagliaId == magliaId &&
-                                                          i.Size == size &&
-                                                          i.CustomName == customName &&
-                                                          i.CustomNumber == customNumber);
+            var item = carrello.Items.FirstOrDefault(i => i.MagliaId == magliaId && i.Size == size &&
+                                                           i.CustomName == customName && i.CustomNumber == customNumber);
 
             decimal prezzoFinale = maglia.Prezzo;
             if (!string.IsNullOrEmpty(customName) || customNumber.HasValue)
             {
-                prezzoFinale += 20;
+                prezzoFinale += 20; // Aggiungi il costo della personalizzazione
             }
 
             if (item == null)
@@ -153,7 +151,6 @@ namespace JerseyShop.Controllers
                 {
                     MagliaId = magliaId,
                     Nome = maglia.Nome,
-                    Descrizione = maglia.Descrizione,
                     PrezzoUnitario = prezzoFinale,
                     Quantità = 1,
                     ImmagineUrl = maglia.ImmagineUrl,
@@ -172,6 +169,7 @@ namespace JerseyShop.Controllers
             return Json(new { success = true });
         }
 
+
         [HttpPost]
         public IActionResult CambiaTaglia(int magliaId, string newSize)
         {
@@ -179,11 +177,13 @@ namespace JerseyShop.Controllers
             var item = carrello.Items.FirstOrDefault(i => i.MagliaId == magliaId);
             if (item != null)
             {
-                item.Size = newSize;
-                HttpContext.Session.SetObject(GetCarrelloSessionKey(), carrello);
+                item.Size = newSize;  // Aggiorna la taglia nel carrello
+                HttpContext.Session.SetObject(GetCarrelloSessionKey(), carrello);  // Salva il carrello aggiornato nella sessione
                 return Json(new { success = true });
             }
             return Json(new { success = false });
         }
+
+
     }
 }

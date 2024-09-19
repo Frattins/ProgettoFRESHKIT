@@ -36,29 +36,34 @@
             {
                 <p><strong>Campionato:</strong> @Model.Campionato</p>
                 <p><strong>Squadra:</strong> @Model.Squadra</p>
+
+                <!-- Sezione di personalizzazione, visibile solo se la maglia non è speciale -->
+                <h4>Personalizza la tua maglia</h4>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="customizeCheckbox" />
+                    <label class="form-check-label" for="customizeCheckbox">Personalizza</label>
+                </div>
+                <div id="customizationOptions" style="display:none;">
+                    <div class="form-group">
+                        <label for="customName">Nome</label>
+                        <input type="text" class="form-control" id="customName" placeholder="Inserisci il nome" />
+                    </div>
+                    <div class="form-group">
+                        <label for="customNumber">Numero</label>
+                        <input type="number" class="form-control" id="customNumber" placeholder="Inserisci il numero" />
+                    </div>
+                    <p>Il costo della personalizzazione è: 20€</p>
+                </div>
+            }
+            else
+            {
+                <!-- Sezione visibile se la maglia è speciale -->
+                <p class="text-danger"><strong>Nota:</strong> Questa maglia è speciale e non può essere personalizzata.</p>
             }
 
-            <h4>Personalizza la tua maglia</h4>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="customizeCheckbox" />
-                <label class="form-check-label" for="customizeCheckbox">Personalizza</label>
-            </div>
-            <div id="customizationOptions" style="display:none;">
-                <div class="form-group">
-                    <label for="customName">Nome</label>
-                    <input type="text" class="form-control" id="customName" placeholder="Inserisci il nome" />
-                </div>
-                <div class="form-group">
-                    <label for="customNumber">Numero</label>
-                    <input type="number" class="form-control" id="customNumber" placeholder="Inserisci il numero" />
-                </div>
-                <p>Il costo della personalizzazione è: 20€</p>
-            </div>
-
-            <button id="addToCartBtn" class="btn btn-primary mt-3">Aggiungi al Carrello</button>
+            <button id="addToCartBtn" class="btn btn-primary mt-3" data-maglia-id="@Model.Id">Aggiungi al Carrello</button>
         </div>
-    </div>
-</div>
+
 
 <div class="container mt-4">
     <h3 class="mt-5">Recensioni</h3>
@@ -144,13 +149,8 @@
 }
 
 @section Scripts {
+
     <script>
-        // Taglie
-        $('#addToCartBtn').on('click', function () {
-            var magliaId = $(this).data('maglia-id');
-            var size = $('#size').val();
-            addToCart(magliaId, size);
-        });
         $(document).ready(function () {
             // Mostra o nasconde le opzioni di personalizzazione
             $("#customizeCheckbox").change(function () {
@@ -160,25 +160,27 @@
             // Aggiunta al carrello con personalizzazione
             $("#addToCartBtn").click(function (e) {
                 e.preventDefault();
+                var magliaId = $(this).data("maglia-id");
+                var size = $("#size").val();
                 var customizeChecked = $("#customizeCheckbox").is(":checked");
                 var customName = $("#customName").val();
                 var customNumber = $("#customNumber").val();
 
-                var formData = new FormData();
-                formData.append("magliaId", @Model.Id);
-                if (customizeChecked) {
-                    formData.append("customName", customName);
-                    formData.append("customNumber", customNumber);
-                }
-
                 $.ajax({
-                    url: "/Carrello/Aggiungi",
+                    url: "@Url.Action("Aggiungi", "Carrello")",
                     type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
+                    data: {
+                        magliaId: magliaId,
+                        size: size,
+                        customName: customizeChecked ? customName : null,
+                        customNumber: customizeChecked ? customNumber : null
+                    },
                     success: function (response) {
-                        window.location.href = "/Carrello/Index";
+                        if (response.success) {
+                            window.location.href = "@Url.Action("Index", "Carrello")";
+                        } else {
+                            alert("Errore durante l'aggiunta al carrello.");
+                        }
                     },
                     error: function (xhr, status, error) {
                         console.error("Errore nell'aggiunta al carrello:", error);
@@ -186,13 +188,14 @@
                 });
             });
 
+            // Gestione preferiti (aggiungi/rimuovi)
             $('.toggle-favorite').click(function (e) {
                 e.preventDefault();
                 var btn = $(this);
-                var magliaId = btn.data('maglia-id');
+                var magliaId = @Model.Id;
 
                 $.ajax({
-                    url: '/Favorites/ToggleFavorite',
+                    url: '@Url.Action("ToggleFavorite", "Favorites")',
                     type: 'POST',
                     data: { magliaId: magliaId },
                     success: function (data) {
@@ -211,4 +214,6 @@
             });
         });
     </script>
+}
+
 }

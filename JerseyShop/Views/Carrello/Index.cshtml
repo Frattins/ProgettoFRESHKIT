@@ -49,15 +49,23 @@ else
                         </form>
                     </td>
                     <td>
-<td>
-    <select class="form-control change-size" data-maglia-id="@item.MagliaId">
-<option value="S" @(item.Size == "S" ? "selected='selected'" : "")>S</option>
-<option value="M" @(item.Size == "M" ? "selected='selected'" : "")>M</option>
-<option value="L" @(item.Size == "L" ? "selected='selected'" : "")>L</option>
-<option value="XL" @(item.Size == "XL" ? "selected='selected'" : "")>XL</option>
+                    <td>
+                        <select class="form-control change-size" data-maglia-id="@item.MagliaId" data-current-size="@item.Size">
+                                @foreach (var size in new[] { "S", "M", "L", "XL" })
+                                {
+                                    if (item.Size == size)
+                                    {
+                                    <option value="@size" selected>@size</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="@size">@size</option>
+                                    }
+                                }
+                        </select>
+                    </td>
 
-    </select>
-</td>
+
 
                     </td>
                     <td>@item.PrezzoTotale.ToString("C")</td>
@@ -83,24 +91,37 @@ else
 
 @section Scripts {
     <script>
-        $('.change-size').on('change', function() {
-            var magliaId = $(this).data('maglia-id');
-            var newSize = $(this).val();
-            $.ajax({
-                url: '@Url.Action("CambiaTaglia", "Carrello")',
-                type: 'POST',
-                data: { magliaId: magliaId, newSize: newSize },
-                success: function(response) {
-                    if (response.success) {
-                        toastr.success('Taglia aggiornata con successo!');
-                    } else {
-                        toastr.error('Si è verificato un errore durante l\'aggiornamento della taglia.');
-                    }
-                },
-                error: function() {
-                    toastr.error('Si è verificato un errore durante l\'aggiornamento della taglia.');
-                }
+        <script>
+            $(document).ready(function () {
+                // Inizializza le taglie selezionate correnti
+                $('.change-size').each(function () {
+                    var select = $(this);
+                    var currentSize = select.data('current-size');
+                    select.val(currentSize); // Seleziona la taglia corrente
+                });
+
+                // Gestione del cambiamento della taglia
+                $('.change-size').on('change', function () {
+                    var magliaId = $(this).data('maglia-id');
+                    var newSize = $(this).val();
+                    $.ajax({
+                        url: '@Url.Action("CambiaTaglia", "Carrello")',
+                        type: 'POST',
+                        data: { magliaId: magliaId, newSize: newSize },
+                        success: function (response) {
+                            if (response.success) {
+                                toastr.success('Taglia aggiornata con successo!');
+                            } else {
+                                toastr.error('Si è verificato un errore durante l\'aggiornamento della taglia.');
+                            }
+                        },
+                        error: function () {
+                            toastr.error('Si è verificato un errore durante l\'aggiornamento della taglia.');
+                        }
+                    });
+                });
             });
-        });
+
+
     </script>
 }

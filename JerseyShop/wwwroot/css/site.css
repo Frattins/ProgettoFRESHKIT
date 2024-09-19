@@ -16,6 +16,38 @@ body {
     margin-bottom: 20px;
 }
 
+.league-nav .nav-link {
+    padding: 10px;
+    border-radius: 50%;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+    .league-nav .nav-link:hover,
+    .league-nav .nav-link.active {
+        background-color: #f8f9fa;
+        transform: scale(1.1);
+    }
+
+    .league-nav .nav-link img {
+        transition: all 0.3s ease;
+    }
+
+    .league-nav .nav-link:hover img,
+    .league-nav .nav-link.active img {
+        filter: brightness(1.2);
+    }
+
+.logo-container {
+    top: 80px;
+    padding-top: 20px;
+}
+
+.league-logo {
+    max-width: 80%;
+    margin: 0 auto 20px;
+    display: block;
+}
 .navbar {
     position: sticky;
     top: 0;
@@ -73,6 +105,9 @@ h1, h2, h3, h4, h5, h6 {
 .sticky-top {
     top: 80px; /* Aggiusta questo valore se necessario */
 }
+
+
+
 
 /* Stile del banner */
 
