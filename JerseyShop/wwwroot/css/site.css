@@ -29,7 +29,7 @@ body {
 .container-fluid {
     width: 96vw;
     margin: auto;
-    background-color: aliceblue; /* Un bianco leggermente off-white */
+    background-color: aliceblue; 
     min-height: 96vh;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
     border-radius: 10px;
@@ -114,7 +114,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .logo-container {
-    top: 80px; /* Aggiusta questo valore in base all'altezza della tua navbar */
+    top: 80px; 
     padding-top: 20px;
 }
 
@@ -125,7 +125,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .sticky-top {
-    top: 80px; /* Aggiusta questo valore se necessario */
+    top: 80px; 
 }
 
 
@@ -162,31 +162,31 @@ h1, h2, h3, h4, h5, h6 {
 
 
 .hero-banner {
-    background-color: #2e2e2e; /* Verde scuro */
-    padding: 30px 0; /* Altezza ridotta */
+    background-color: #2e2e2e; 
+    padding: 30px 0; 
 }
 
 /* Loghi dei campionati in cerchio */
 .league-logo-circle {
     width: 150px;
     height: 150px;
-    border-radius: 50%; /* Rende il contenitore circolare */
-    border: 3px solid #ccc; /* Colore del bordo */
+    border-radius: 50%; 
+    border: 3px solid #ccc; 
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 20px; /* Centra il cerchio e aggiunge margine sotto */
+    margin: 0 auto 20px; 
     background-color: white;
-    transition: all 0.3s ease; /* Aggiunge una transizione per l'effetto hover */
+    transition: all 0.3s ease; 
 }
 
     .league-logo-circle img {
-        max-width: 70%; /* Rende l'immagine più piccola per adattarsi meglio nel cerchio */
+        max-width: 70%; 
     }
 
     .league-logo-circle:hover {
-        border-color: #007bff; /* Cambia colore del bordo al passaggio del mouse */
-        transform: scale(1.1); /* Ingrandisce il cerchio al passaggio del mouse */
+        border-color: #007bff; 
+        transform: scale(1.1); 
     }
 /* Stile del banner */
 .hero-banner {
