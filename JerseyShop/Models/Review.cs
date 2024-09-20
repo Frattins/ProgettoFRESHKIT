@@ -17,7 +17,7 @@ namespace JerseyShop.Models
         public string Comment { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        // Proprietà di navigazione
+        
         public Maglia Maglia { get; set; }
         public IdentityUser User { get; set; }
     }

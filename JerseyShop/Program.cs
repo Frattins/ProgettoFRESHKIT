@@ -1,12 +1,11 @@
-using JerseyShop.Data;  // Assicurati che ci sia il namespace corretto
+using JerseyShop.Data;  
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurazione Stripe
-StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -16,8 +15,8 @@ builder.Services.AddDbContext<FootballShopContext>(options =>
 
 // Configura Identity per gestire l'autenticazione e i ruoli
 builder.Services.AddDefaultIdentity<IdentityUser>(options => {
-    options.SignIn.RequireConfirmedAccount = false;  // Disabilita la conferma email
-    options.Lockout.AllowedForNewUsers = false;      // Disabilita il lockout per nuovi utenti
+    options.SignIn.RequireConfirmedAccount = false;  
+    options.Lockout.AllowedForNewUsers = false;      
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<FootballShopContext>();
@@ -56,7 +55,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseSession();  // Usa la sessione
+app.UseSession();  
 
 app.UseAuthentication();
 app.UseAuthorization();

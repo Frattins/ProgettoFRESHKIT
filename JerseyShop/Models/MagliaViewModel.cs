@@ -8,7 +8,7 @@
         public string Descrizione { get; set; }
         public string Campionato { get; set; }
         public string Squadra { get; set; }
-        public IFormFile ImmagineUrl { get; set; } // Per il caricamento dell'immagine
+        public IFormFile ImmagineUrl { get; set; } 
         public bool IsSpeciale { get; set; }
     }
 }

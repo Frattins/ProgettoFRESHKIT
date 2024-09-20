@@ -19,7 +19,7 @@ namespace JerseyShop.Models
 
         public bool IsSpeciale { get; set; }
 
-        // Campionato e Squadra come semplici stringhe
+        
         [Required]
         public string Campionato { get; set; }
 

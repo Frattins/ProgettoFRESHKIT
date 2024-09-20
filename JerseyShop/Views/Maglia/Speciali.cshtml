@@ -1,39 +1,55 @@
 ﻿@model IEnumerable<JerseyShop.Models.Maglia>
+<div class="container-fluid p-0">
+    <div class="row no-gutters">
+        <!-- Banner Sinistro -->
+        <div class="col-md-2 d-none d-md-block banner-container">
+            <img src="/images/Reus2.png" alt="Reus" class="banner-image">
+        </div>
 
-<div class="container mt-4">
-    <h2 class="text-center mb-4" style="color: #ffd700; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Maglie Speciali</h2>
-
-    <div class="row">
-        @foreach (var maglia in Model)
-        {
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="maglia-special-item card h-100" style="background: linear-gradient(135deg, #ffd700, #ff6347); border-radius: 15px; box-shadow: 0px 5px 15px rgba(0,0,0,0.3); overflow: hidden;">
-                    <div class="position-relative">
-                        <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="border-top-left-radius: 15px; border-top-right-radius: 15px; height: 250px; object-fit: cover; filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.5));">
-                        <span class="position-absolute top-0 right-0 bg-warning text-dark p-2 m-2 rounded-circle">Speciale</span>
-                    </div>
-                    <div class="card-body text-center d-flex flex-column justify-content-between">
-                        <div>
-                            <h5 class="card-title" style="font-size: 1.5rem; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">@maglia.Nome</h5>
-                            <p class="card-text" style="font-size: 1.2rem; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">@maglia.Prezzo.ToString("C")</p>
+        <!-- Contenuto Principale -->
+        <div class="col-md-8">
+            <div class="container mt-4">
+                <h2 class="text-center mb-4" style="text-shadow: 2px 2px 4px darkorange;">Maglie Speciali</h2>
+                <div class="row">
+                    @foreach (var maglia in Model)
+                    {
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="maglia-special-item card h-100" style="background: linear-gradient(135deg, #ffd700, #ff6347); border-radius: 15px; box-shadow: 0px 5px 15px rgba(0,0,0,0.3); overflow: hidden;">
+                                <div class="position-relative">
+                                    <img src="/images/Maglie/@maglia.ImmagineUrl" class="card-img-top" alt="@maglia.Nome" style="border-top-left-radius: 15px; border-top-right-radius: 15px; height: 250px; object-fit: cover; filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.5));">
+                                    <span class="position-absolute top-0 right-0 bg-warning text-dark p-2 m-2 rounded-circle">Speciale</span>
+                                </div>
+                                <div class="card-body text-center d-flex flex-column justify-content-between">
+                                    <div>
+                                        <h5 class="card-title" style="font-size: 1.5rem; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">@maglia.Nome</h5>
+                                        <p class="card-text" style="font-size: 1.2rem; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">@maglia.Prezzo.ToString("C")</p>
+                                    </div>
+                                    <div class="mt-3">
+                                        <a href="/Maglia/Details/@maglia.Id" class="btn btn-light btn-sm mr-2" style="border-radius: 30px;">
+                                            <i class="fas fa-info-circle"></i> Dettagli
+                                        </a>
+                                        <button class="btn btn-success btn-sm add-to-cart mr-2" data-maglia-id="@maglia.Id" style="border-radius: 30px;">
+                                            <i class="fas fa-shopping-cart"></i> Aggiungi
+                                        </button>
+                                        <button class="btn btn-danger btn-sm toggle-favorite" data-maglia-id="@maglia.Id" style="border-radius: 30px;">
+                                            <i class="@(maglia.IsFavorite ? "fas" : "far") fa-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mt-3">
-                            <a href="/Maglia/Details/@maglia.Id" class="btn btn-light btn-sm mr-2" style="border-radius: 30px;">
-                                <i class="fas fa-info-circle"></i> Dettagli
-                            </a>
-                            <button class="btn btn-success btn-sm add-to-cart mr-2" data-maglia-id="@maglia.Id" style="border-radius: 30px;">
-                                <i class="fas fa-shopping-cart"></i> Aggiungi
-                            </button>
-                            <button class="btn btn-danger btn-sm toggle-favorite" data-maglia-id="@maglia.Id" style="border-radius: 30px;">
-                                <i class="@(maglia.IsFavorite ? "fas" : "far") fa-heart"></i>
-                            </button>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
-        }
+        </div>
+
+        <!-- Banner Destro -->
+        <div class="col-md-2 d-none d-md-block banner-container">
+            <img src="/images/Calafiori.png" alt="Calafiori" class="banner-image">
+        </div>
     </div>
 </div>
+
 
 <script>
     $(document).ready(function () {

@@ -20,8 +20,8 @@ namespace JerseyShop.Controllers
 
         private string GetCarrelloSessionKey()
         {
-            var userId = _userManager.GetUserId(User); // Ottiene l'ID dell'utente attuale
-            return $"Carrello_{userId}"; // Carrello specifico per ogni utente
+            var userId = _userManager.GetUserId(User); 
+            return $"Carrello_{userId}"; 
         }
 
         public IActionResult Index()
@@ -60,7 +60,7 @@ namespace JerseyShop.Controllers
                 item.Quantità++;
             }
 
-            HttpContext.Session.SetObject(GetCarrelloSessionKey(), carrello);  // Assicurati che il carrello venga sempre salvato
+            HttpContext.Session.SetObject(GetCarrelloSessionKey(), carrello);  
 
             return RedirectToAction("Index");
         }
@@ -120,7 +120,7 @@ namespace JerseyShop.Controllers
 
             if (maglia == null)
             {
-                throw new Exception("Maglia non trovata"); // Puoi gestire l'eccezione in modo più appropriato
+                throw new Exception("Maglia non trovata"); 
             }
 
             return maglia;
@@ -142,7 +142,7 @@ namespace JerseyShop.Controllers
             decimal prezzoFinale = maglia.Prezzo;
             if (!string.IsNullOrEmpty(customName) || customNumber.HasValue)
             {
-                prezzoFinale += 20; // Aggiungi il costo della personalizzazione
+                prezzoFinale += 20; 
             }
 
             if (item == null)
@@ -178,7 +178,7 @@ namespace JerseyShop.Controllers
             if (item != null)
             {
                 item.Size = newSize;  // Aggiorna la taglia nel carrello
-                HttpContext.Session.SetObject(GetCarrelloSessionKey(), carrello);  // Salva il carrello aggiornato nella sessione
+                HttpContext.Session.SetObject(GetCarrelloSessionKey(), carrello);  
                 return Json(new { success = true });
             }
             return Json(new { success = false });

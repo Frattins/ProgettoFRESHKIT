@@ -30,7 +30,7 @@ namespace JerseyShop.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            var maglie = _context.Maglie.ToList();  // Show all jerseys, including special and from all leagues
+            var maglie = _context.Maglie.ToList();  
             return View(maglie);
         }
 
@@ -38,7 +38,7 @@ namespace JerseyShop.Controllers
         public IActionResult SerieA()
         {
             var maglie = _context.Maglie
-                .Where(m => m.Campionato == "Serie A" && !m.IsSpeciale)  // Exclude special jerseys
+                .Where(m => m.Campionato == "Serie A" && !m.IsSpeciale)  
                 .ToList();
             return View(maglie);
         }
@@ -47,7 +47,7 @@ namespace JerseyShop.Controllers
         public IActionResult PremierLeague()
         {
             var maglie = _context.Maglie
-                .Where(m => m.Campionato == "Premier League" && !m.IsSpeciale)  // Exclude special jerseys
+                .Where(m => m.Campionato == "Premier League" && !m.IsSpeciale)  
                 .ToList();
             return View(maglie);
         }
@@ -56,7 +56,7 @@ namespace JerseyShop.Controllers
         public IActionResult Bundesliga()
         {
             var maglie = _context.Maglie
-                .Where(m => m.Campionato == "Bundesliga" && !m.IsSpeciale)  // Exclude special jerseys
+                .Where(m => m.Campionato == "Bundesliga" && !m.IsSpeciale)  
                 .ToList();
             return View(maglie);
         }
@@ -65,7 +65,7 @@ namespace JerseyShop.Controllers
         public IActionResult LaLiga()
         {
             var maglie = _context.Maglie
-                .Where(m => m.Campionato == "La Liga" && !m.IsSpeciale)  // Exclude special jerseys
+                .Where(m => m.Campionato == "La Liga" && !m.IsSpeciale)  
                 .ToList();
             return View(maglie);
         }
@@ -74,7 +74,7 @@ namespace JerseyShop.Controllers
         public IActionResult Ligue1()
         {
             var maglie = _context.Maglie
-                .Where(m => m.Campionato == "Ligue 1" && !m.IsSpeciale)  // Exclude special jerseys
+                .Where(m => m.Campionato == "Ligue 1" && !m.IsSpeciale)  
                 .ToList();
             return View(maglie);
         }
@@ -83,7 +83,7 @@ namespace JerseyShop.Controllers
         public IActionResult Speciali()
         {
             var maglieSpeciali = _context.Maglie
-                .Where(m => m.IsSpeciale)  // Show only special jerseys
+                .Where(m => m.IsSpeciale)  
                 .ToList();
             return View(maglieSpeciali);
         }
@@ -138,7 +138,7 @@ namespace JerseyShop.Controllers
 
                 _context.Add(newMaglia);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");  // Redirect to the admin index after creation
+                return RedirectToAction("Index");  
             }
 
             return View(model);
@@ -155,7 +155,7 @@ namespace JerseyShop.Controllers
                 _context.Maglie.Remove(maglia);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Index");  // Redirect to the admin index after deletion
+            return RedirectToAction("Index");  
         }
         public async Task<IActionResult> Details(int id)
         {

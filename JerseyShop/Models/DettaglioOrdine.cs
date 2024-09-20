@@ -16,8 +16,6 @@ namespace JerseyShop.Models
         public int Quantità { get; set; }
 
         public decimal PrezzoUnitario { get; set; }
-
-        // Relazioni con Ordine e Maglia
         public Ordine Ordine { get; set; }
         public Maglia Maglia { get; set; }
     }

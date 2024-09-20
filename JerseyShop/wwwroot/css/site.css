@@ -15,7 +15,16 @@ body {
     justify-content: space-evenly;
 }
 
+.player-image-left, .player-image-right {
+    max-width: 100%;
+    height: auto;
+}
 
+@media (max-width: 768px) {
+    .player-image-left, .player-image-right {
+        display: none;
+    }
+}
 
 .container-fluid {
     width: 96vw;
@@ -120,7 +129,34 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
+.banner-container {
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+}
 
+.banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+    .banner-image:hover {
+        opacity: 1;
+    }
+
+@media (max-width: 768px) {
+    .banner-container {
+        display: none;
+    }
+}
+
+.container-fluid {
+    overflow-x: hidden;
+}
 
 /* Stile del banner */
 
